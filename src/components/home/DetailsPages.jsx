@@ -1,17 +1,32 @@
 "use client";
 import { CARD_DATA_LIST } from "@/utils/helper";
 import { useParams } from "next/navigation";
-import ThemeSlider from "./ThemeSlider";
 import ContactUs from "../common/ContactUs";
 import Faq from "../common/Faq";
+import ThemeSlider from "./ThemeSlider";
+import Cta from "../common/Cta";
 
 const DetailsPages = () => {
   let { id } = useParams();
-  console.log(id);
   const car = CARD_DATA_LIST.find((_, index) => index === parseInt(id));
   if (!car) {
     return <p>Car not found!</p>;
   }
+  const downloadImage = (url, index) => {
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `car_image_${index + 1}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+  };
+
+  const handleDownloadAll = () => {
+    if (!car.image || car.image.length === 0) return;
+    car.image.forEach((imgUrl, index) => {
+      downloadImage(imgUrl, index);
+    });
+  };
   return (
     <>
       <div className="container mx-auto max-w-[1180px] px-5 py-8 md:py-10">
@@ -25,7 +40,7 @@ const DetailsPages = () => {
             </h2>
             <div className="mt-4">
               <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
-                <span>Price:</span> <span>{car.carPrice}</span>
+                <span>Price:</span> <span>₹{car.carPrice}</span>
               </p>
               <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
                 <span>Model:</span> <span>{car.carModel}</span>
@@ -52,6 +67,15 @@ const DetailsPages = () => {
               <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t border-b py-2 px-4 sm:px-6">
                 <span>Engine Condition:</span>
                 <span>{car.carEngineCondition}</span>
+              </p>
+              <p className="text-base md:text-lg leading-[120%] text-black flex justify-between pt-2 px-4 sm:px-6">
+                <span>Download Photo:</span>
+                <Cta
+                  onClick={handleDownloadAll}
+                  className="!px-4 !py-1 !w-auto"
+                >
+                  Download All
+                </Cta>
               </p>
             </div>
           </div>

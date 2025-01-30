@@ -52,7 +52,7 @@ const ThemeSlider = ({ imageData }) => {
         {imageData.map((image, index) => {
           return (
             <SwiperSlide key={index}>
-              <div className="bg-white rounded-md h-full overflow-hidden border border-black border-opacity-10 flex items-center justify-center">
+              <div className="bg-white rounded-md overflow-hidden border border-black border-opacity-10 flex items-center justify-center cursor-pointer h-[42px] sm:h-[70px] md:h-[93px] lg:h-[60px] xl:h-[69px]">
                 <Image
                   src={image}
                   alt="theme"

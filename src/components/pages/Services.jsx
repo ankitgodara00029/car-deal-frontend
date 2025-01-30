@@ -26,7 +26,7 @@ const Services = () => {
                     alt="services"
                     width={100}
                     height={100}
-                    className="w-full object-cover "
+                    className="w-full object-cover h-[70px] sm:h-[90px] md:h-[100px] lg:h-[110px]"
                   />
                   <div className="py-1 md:py-2 text-center border-t">
                     <p className="text-sm lg:text-base font-semibold">

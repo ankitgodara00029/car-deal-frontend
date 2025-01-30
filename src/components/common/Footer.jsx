@@ -2,14 +2,6 @@ import Link from "next/link";
 import Icons from "./Icons";
 const Footer = () => {
   const currentYear = new Date().getFullYear();
-  const phoneNumber = "+917015371814";
-  const message = "Hello, I would like to know more about your services!";
-  const handleWhatsAppClick = () => {
-    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-      message
-    )}`;
-    window.open(url, "_blank");
-  };
   return (
     <div className="bg-[#1f2937]">
       <div className="container max-w-[1164px] px-3 mx-auto flex justify-between flex-wrap pb-12 pt-16 gap-y-9">
@@ -132,12 +124,12 @@ const Footer = () => {
           <ul className="flex flex-col gap-2 mt-4 lg:mt-6">
             <li className="text-white text-base">Contact Us</li>
             <li>
-              <button
-                // onClick={handleWhatsAppClick}
+              <Link
+                href="tel:7015371814"
                 className="text-white opacity-70 hover:opacity-100 transition-all ease-in-out duration-300"
               >
                 +91 7015371814
-              </button>
+              </Link>
             </li>
             <li>
               <Link

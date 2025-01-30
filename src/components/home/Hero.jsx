@@ -1,15 +1,6 @@
-"use client";
 import Cta from "../common/Cta";
 
 const Hero = () => {
-  const phoneNumber = "+919992911029";
-  const message = "Hello, I would like to know more about your services!";
-  const handleWhatsAppClick = () => {
-    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-      message
-    )}`;
-    window.open(url, "_blank");
-  };
   return (
     <div className="bg-[url('/assets/images/webp/hero-bg-image.webp')] bg-cover bg-center h-[300px] md:h-[400px]">
       <div className="container mx-auto max-w-[1180px] px-5 flex items-center h-full">
@@ -22,10 +13,10 @@ const Hero = () => {
             Find the perfect car or get the right buyers—all in one place.
           </p>
           <Cta
-            onClick={handleWhatsAppClick}
-            className="!w-auto px-3 sm:px-5"
+            url="/contact#car-details-form"
+            className="!w-auto inline-block px-3 sm:px-5"
           >
-            Sell Your Car Today
+            Add New Car
           </Cta>
         </div>
       </div>
