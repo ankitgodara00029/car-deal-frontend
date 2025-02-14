@@ -66,7 +66,9 @@ const CardsData = () => {
                       </p>
                     </div>
                     <div className="flex justify-between pb-3">
-                      <p className="text-base sm:text-lg">Fuel: {obj.carFuel}</p>
+                      <p className="text-base sm:text-lg">
+                        Fuel: {obj.carFuel}
+                      </p>
                     </div>
                     <Cta url={`${index}`}>View Complete Details</Cta>
                   </div>

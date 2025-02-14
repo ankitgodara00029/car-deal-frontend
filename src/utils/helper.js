@@ -36,59 +36,59 @@ export const FAQ_LIST = [
 // SERVICES LIST
 export const SERVICES_LIST = [
   {
-    title: "alto",
+    title: "Scorpio",
     image: "/assets/images/webp/scorpio.webp",
   },
   {
-    title: "alto",
+    title: "Bolero",
     image: "/assets/images/webp/alto.webp",
   },
   {
-    title: "alto",
+    title: "Bolero Camper",
     image: "/assets/images/webp/alto.webp",
   },
   {
-    title: "alto",
+    title: "Alto",
     image: "/assets/images/webp/alto.webp",
   },
   {
-    title: "alto",
+    title: "Swift",
     image: "/assets/images/webp/alto.webp",
   },
   {
-    title: "alto",
+    title: "Ritz",
     image: "/assets/images/webp/alto.webp",
   },
   {
-    title: "alto",
+    title: "Ertiga",
     image: "/assets/images/webp/alto.webp",
   },
   {
-    title: "alto",
+    title: "Fortuner",
     image: "/assets/images/webp/alto.webp",
   },
   {
-    title: "alto",
+    title: "Thar",
     image: "/assets/images/webp/alto.webp",
   },
   {
-    title: "alto",
+    title: "i10",
     image: "/assets/images/webp/alto.webp",
   },
   {
-    title: "alto",
+    title: "i20",
     image: "/assets/images/webp/alto.webp",
   },
   {
-    title: "alto",
+    title: "Harrier",
     image: "/assets/images/webp/alto.webp",
   },
   {
-    title: "alto",
+    title: "Bolero Pik-Up",
     image: "/assets/images/webp/alto.webp",
   },
   {
-    title: "alto",
+    title: "WagonR",
     image: "/assets/images/webp/alto.webp",
   },
   {

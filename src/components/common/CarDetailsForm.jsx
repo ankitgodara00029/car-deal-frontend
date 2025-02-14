@@ -2,9 +2,11 @@
 import { CARD_DATA_LIST } from "@/utils/helper";
 import Image from "next/image";
 import { useRef, useState } from "react";
+import Tesseract from "tesseract.js";
 import CommonInput from "./CommonInput";
 import CommonSelect from "./CommonSelect";
 import Cta from "./Cta";
+
 const CarDetailsForm = () => {
   const [formData, setFormData] = useState({
     image: [],
@@ -23,20 +25,47 @@ const CarDetailsForm = () => {
   });
 
   const fileInputRef = useRef(null);
+
   // Handle form input changes
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
   };
 
+  // Function to check if an image contains numbers
+  const checkImageForNumbers = async (file) => {
+    return new Promise((resolve) => {
+      Tesseract.recognize(file, "eng")
+        .then(({ data: { text } }) => {
+          const containsNumbers = /\d/.test(text); // Check if text contains numbers
+          resolve(containsNumbers);
+        })
+        .catch(() => resolve(false));
+    });
+  };
+
   // Handle file input changes
-  const handleFileChange = (e) => {
+  const handleFileChange = async (e) => {
     const files = Array.from(e.target.files);
-    const imageUrls = files.map((file) => URL.createObjectURL(file));
-    setFormData((prevData) => ({
-      ...prevData,
-      image: [...imageUrls],
-    }));
+    const validImages = [];
+
+    for (const file of files) {
+      const containsNumbers = await checkImageForNumbers(file);
+      if (containsNumbers) {
+        alert(
+          "Your image includes numbers. Please upload another image without numbers."
+        );
+        continue;
+      }
+      validImages.push(URL.createObjectURL(file));
+    }
+
+    if (validImages.length > 0) {
+      setFormData((prevData) => ({
+        ...prevData,
+        image: [...prevData.image, ...validImages],
+      }));
+    }
   };
 
   // Handle form submission
@@ -44,6 +73,7 @@ const CarDetailsForm = () => {
     e.preventDefault();
     CARD_DATA_LIST.push(formData);
     alert("Form submitted successfully!");
+
     // Clear the form data
     setFormData({
       image: [],
@@ -65,12 +95,9 @@ const CarDetailsForm = () => {
       fileInputRef.current.value = "";
     }
   };
+
   return (
     <div className="py-8 md:py-12 px-5 relative">
-      <div
-        className="absolute -top-6 md:-top-12 -z-[20]"
-        id="car-details-form"
-      ></div>
       <div className="container mx-auto border shadow-md bg-white max-w-[1180px] px-5 py-6 rounded-lg">
         <h2 className="text-3xl sm:text-4xl font-semibold text-center mb-4 md:mb-6">
           Car <span className="text-[#ff5e00]">Details</span> Form
@@ -193,7 +220,7 @@ const CarDetailsForm = () => {
               accept="image/*"
               onChange={handleFileChange}
               className="hidden"
-              ref={fileInputRef} // Attach the ref to the input
+              ref={fileInputRef}
             />
           </div>
           <Cta type="submit" className="!text-sm">
@@ -215,37 +242,6 @@ const CarDetailsForm = () => {
             </div>
           ))}
         </div>
-      </div>
-      <div className="grid gap-4 lg:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-4 max-w-[1180px] mx-auto">
-        {CARD_DATA_LIST.map((obj, index) => {
-          return (
-            <div
-              className="border rounded-lg overflow-hidden hover:shadow-lg transition-all ease-in-out duration-300 max-sm:max-w-[380px] max-sm:w-full max-sm:mx-auto"
-              key={index}
-            >
-              <div className="h-[240px] lg:h-[210px] xl:h-[250px] flex items-center border-b overflow-hidden">
-                <Image
-                  src={obj.image[0]}
-                  alt="scorpio"
-                  width={300}
-                  height={300}
-                  className="w-full object-cover"
-                />
-              </div>
-              <div className="p-3 sm:p-4">
-                <h2 className="pb-2 font-bold text-xl sm:text-2xl line-clamp-1">
-                  {obj.carName} {index + 1}
-                </h2>
-                <div className="flex justify-between pb-1">
-                  <p className="text-base sm:text-lg">₹ {obj.carPrice}</p>
-                  <p className="text-base sm:text-lg">Model {obj.carModel}</p>
-                </div>
-                <p className="text-base sm:text-lg pb-3">Fuel {obj.carFuel}</p>
-                <Cta url={`/${index}`}>View Complete Details</Cta>
-              </div>
-            </div>
-          );
-        })}
       </div>
     </div>
   );

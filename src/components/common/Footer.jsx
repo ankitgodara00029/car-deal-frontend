@@ -14,7 +14,7 @@ const Footer = () => {
           >
             logo
           </Link>
-          <p className="text-white opacity-70 !leading-[150%] mt-3 text-sm max-w-[380px]">
+          <p className="text-white opacity-70 !leading-[150%] mt-3 text-sm max-w-[320px]">
             We are dedicated to connecting buyers and sellers for a seamless car
             trading experience. Whether you’re looking to sell your car or find
             your dream ride, we’re here to help.
@@ -90,7 +90,7 @@ const Footer = () => {
             </li>
           </ul>
         </div>
-        <div className="4/12 lg:w-3/12 ">
+        <div className="4/12 lg:w-3/12">
           <p className="text-white text-base">Join our community</p>
           <div className="flex gap-3 mt-3 lg:mt-4">
             <Link
