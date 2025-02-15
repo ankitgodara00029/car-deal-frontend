@@ -21,13 +21,16 @@ const CarDetailsForm = () => {
     interior: "",
     engine: "",
   });
+
   const fileInputRef = useRef(null);
+
   // Handle form input changes
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
   };
 
+  // Handle file selection
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
     const imageUrls = files.map((file) => URL.createObjectURL(file));
@@ -38,28 +41,64 @@ const CarDetailsForm = () => {
   };
 
   // Handle form submission
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    // Add async keyword
     e.preventDefault();
-    console.log(formData, "formdataformdataformdataformdata");
-    alert("Form submitted successfully!");
-    setFormData({
-      images: [],
-      name: "",
-      number: "",
-      car: "",
-      price: "",
-      model: "",
-      owner: "",
-      fuel: "",
-      kilometers: "",
-      original: "",
-      tyre: "",
-      interior: "",
-      engine: "",
-    });
 
-    if (fileInputRef.current) {
-      fileInputRef.current.value = "";
+    const data = {
+      data: {
+        name: formData.name,
+        number: formData.number,
+        car: formData.car,
+        price: formData.price,
+        model: formData.model,
+        owner: formData.owner,
+        fuel: formData.fuel,
+        kilometers: formData.kilometers,
+        original: formData.original,
+        tyre: formData.tyre,
+        interior: formData.interior,
+        engine: formData.engine,
+      },
+    };
+
+    try {
+      const response = await fetch("http://localhost:1337/api/car-data-form", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (!response.ok) {
+        throw new Error(`HTTP error! Status: ${response.status}`);
+      }
+
+      await response.json();
+
+      // Reset form state
+      setFormData({
+        images: [],
+        name: "",
+        number: "",
+        car: "",
+        price: "",
+        model: "",
+        owner: "",
+        fuel: "",
+        kilometers: "",
+        original: "",
+        tyre: "",
+        interior: "",
+        engine: "",
+      });
+
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ""; // Reset file input
+      }
+    } catch (error) {
+      console.error("Error submitting form:", error);
     }
   };
 
@@ -172,6 +211,8 @@ const CarDetailsForm = () => {
             onChange={handleChange}
             required
           />
+
+          {/* File Upload */}
           <div>
             <label
               htmlFor="upload-file"
@@ -182,7 +223,6 @@ const CarDetailsForm = () => {
             <input
               type="file"
               id="upload-file"
-              required
               multiple
               accept="image/*"
               onChange={handleFileChange}
@@ -190,10 +230,13 @@ const CarDetailsForm = () => {
               ref={fileInputRef}
             />
           </div>
+
           <Cta type="submit" className="!text-sm">
             Submit
           </Cta>
         </form>
+
+        {/* Image Preview */}
         <div className="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-8 gap-2 mt-3">
           {formData.images.map((image, index) => (
             <div

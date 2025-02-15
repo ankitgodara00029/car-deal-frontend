@@ -16,7 +16,6 @@ const HomePage = () => {
         });
         const result = await data.json();
         setShowData(result);
-        console.log(result, "klsdfjalksdjkf");
       } catch (error) {
         console.error("Error fetching data:", error);
       }
