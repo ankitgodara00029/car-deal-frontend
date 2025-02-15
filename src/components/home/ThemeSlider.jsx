@@ -11,7 +11,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 const ThemeSlider = ({ imageData }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   return (
-    <div>
+    <>
       <Swiper
         style={{
           "--swiper-navigation-color": "#fff",
@@ -24,12 +24,12 @@ const ThemeSlider = ({ imageData }) => {
         modules={[FreeMode, EffectFade, Navigation, Thumbs]}
         className="mySwiper2"
       >
-        {imageData.map((image, index) => {
+        {imageData?.map((obj, index) => {
           return (
             <SwiperSlide key={index}>
-              <div className="bg-white rounded-lg overflow-hidden relative h-[270px] sm:h-[400px] md:h-[500px] lg:h-[400px] border border-black border-opacity-10 flex items-center justify-center">
-                <Image
-                  src={image}
+              <div className="bg-white rounded-lg overflow-hidden relative h-[270px] sm:h-[400px] md:h-[500px] lg:h-[428px] border border-black border-opacity-10 flex items-center justify-center">
+                <img
+                  src={`http://localhost:1337${obj.url}`}
                   alt="theme"
                   className="w-full"
                   width={500}
@@ -49,12 +49,12 @@ const ThemeSlider = ({ imageData }) => {
         modules={[FreeMode, Navigation, Thumbs]}
         className="mySwiper mt-2"
       >
-        {imageData.map((image, index) => {
+        {imageData?.map((obj, index) => {
           return (
             <SwiperSlide key={index}>
               <div className="bg-white rounded-md overflow-hidden border border-black border-opacity-10 flex items-center justify-center cursor-pointer h-[42px] sm:h-[70px] md:h-[93px] lg:h-[60px] xl:h-[69px]">
-                <Image
-                  src={image}
+                <img
+                  src={`http://localhost:1337${obj.url}`}
                   alt="theme"
                   className="w-full"
                   width={90}
@@ -65,7 +65,7 @@ const ThemeSlider = ({ imageData }) => {
           );
         })}
       </Swiper>
-    </div>
+    </>
   );
 };
 

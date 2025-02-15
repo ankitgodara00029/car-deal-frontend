@@ -1,94 +1,61 @@
 "use client";
-import { CARD_DATA_LIST } from "@/utils/helper";
 import Image from "next/image";
 import { useRef, useState } from "react";
-import Tesseract from "tesseract.js";
 import CommonInput from "./CommonInput";
 import CommonSelect from "./CommonSelect";
 import Cta from "./Cta";
 
 const CarDetailsForm = () => {
   const [formData, setFormData] = useState({
-    image: [],
+    images: [],
     name: "",
-    phone: "",
-    carName: "",
-    carPrice: "",
-    carModel: "",
-    carOwner: "",
-    carFuel: "",
-    carKms: "",
-    carOriginal: "",
-    carTyreCondition: "",
-    carInteriorCondition: "",
-    carEngineCondition: "",
+    number: "",
+    car: "",
+    price: "",
+    model: "",
+    owner: "",
+    fuel: "",
+    kilometers: "",
+    original: "",
+    tyre: "",
+    interior: "",
+    engine: "",
   });
-
   const fileInputRef = useRef(null);
-
   // Handle form input changes
   const handleChange = (e) => {
     const { id, value } = e.target;
     setFormData({ ...formData, [id]: value });
   };
 
-  // Function to check if an image contains numbers
-  const checkImageForNumbers = async (file) => {
-    return new Promise((resolve) => {
-      Tesseract.recognize(file, "eng")
-        .then(({ data: { text } }) => {
-          const containsNumbers = /\d/.test(text); // Check if text contains numbers
-          resolve(containsNumbers);
-        })
-        .catch(() => resolve(false));
-    });
-  };
-
-  // Handle file input changes
-  const handleFileChange = async (e) => {
+  const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    const validImages = [];
-
-    for (const file of files) {
-      const containsNumbers = await checkImageForNumbers(file);
-      if (containsNumbers) {
-        alert(
-          "Your image includes numbers. Please upload another image without numbers."
-        );
-        continue;
-      }
-      validImages.push(URL.createObjectURL(file));
-    }
-
-    if (validImages.length > 0) {
-      setFormData((prevData) => ({
-        ...prevData,
-        image: [...prevData.image, ...validImages],
-      }));
-    }
+    const imageUrls = files.map((file) => URL.createObjectURL(file));
+    setFormData((prevData) => ({
+      ...prevData,
+      images: [...prevData.images, ...imageUrls],
+    }));
   };
 
   // Handle form submission
   const handleSubmit = (e) => {
     e.preventDefault();
-    CARD_DATA_LIST.push(formData);
+    console.log(formData, "formdataformdataformdataformdata");
     alert("Form submitted successfully!");
-
-    // Clear the form data
     setFormData({
-      image: [],
+      images: [],
       name: "",
-      phone: "",
-      carName: "",
-      carPrice: "",
-      carModel: "",
-      carOwner: "",
-      carFuel: "",
-      carKms: "",
-      carOriginal: "",
-      carTyreCondition: "",
-      carInteriorCondition: "",
-      carEngineCondition: "",
+      number: "",
+      car: "",
+      price: "",
+      model: "",
+      owner: "",
+      fuel: "",
+      kilometers: "",
+      original: "",
+      tyre: "",
+      interior: "",
+      engine: "",
     });
 
     if (fileInputRef.current) {
@@ -115,93 +82,93 @@ const CarDetailsForm = () => {
             required
           />
           <CommonInput
-            id="phone"
+            id="number"
             label="Phone"
             placeholder="Enter your Number"
-            value={formData.phone}
+            value={formData.number}
             onChange={handleChange}
             required
           />
           <CommonInput
-            id="carName"
+            id="car"
             label="Car Name"
             placeholder="Enter car name"
-            value={formData.carName}
+            value={formData.car}
             onChange={handleChange}
             required
           />
           <CommonInput
-            id="carPrice"
+            id="price"
             type="number"
             label="Price"
             placeholder="Enter car price"
-            value={formData.carPrice}
+            value={formData.price}
             onChange={handleChange}
             required
           />
           <CommonInput
-            id="carModel"
+            id="model"
             label="Model"
             type="number"
             placeholder="Enter car model"
-            value={formData.carModel}
+            value={formData.model}
             onChange={handleChange}
             required
           />
           <CommonSelect
-            id="carOwner"
+            id="owner"
             label="Owner"
             options={["1st", "2nd", "3rd"]}
-            value={formData.carOwner}
+            value={formData.owner}
             onChange={handleChange}
             required
           />
           <CommonSelect
-            id="carFuel"
+            id="fuel"
             label="Fuel Type"
             options={["Petrol", "Diesel", "Electric", "Hybrid"]}
-            value={formData.carFuel}
+            value={formData.fuel}
             onChange={handleChange}
             required
           />
           <CommonInput
-            id="carKms"
+            id="kilometers"
             type="number"
             label="Kilometers Driven"
             placeholder="Enter kilometers driven"
-            value={formData.carKms}
+            value={formData.kilometers}
             onChange={handleChange}
             required
           />
           <CommonSelect
-            id="carOriginal"
+            id="original"
             label="Original Condition (%)"
             options={["40%", "50%", "60%", "70%", "80%", "90%", "100%"]}
-            value={formData.carOriginal}
+            value={formData.original}
             onChange={handleChange}
             required
           />
           <CommonSelect
-            id="carTyreCondition"
+            id="tyre"
             label="Tyre Condition (%)"
             options={["40%", "50%", "60%", "70%", "80%", "90%", "100%"]}
-            value={formData.carTyreCondition}
+            value={formData.tyre}
             onChange={handleChange}
             required
           />
           <CommonSelect
-            id="carInteriorCondition"
+            id="interior"
             label="Interior Condition"
             options={["40%", "50%", "60%", "70%", "80%", "90%", "100%"]}
-            value={formData.carInteriorCondition}
+            value={formData.interior}
             onChange={handleChange}
             required
           />
           <CommonSelect
-            id="carEngineCondition"
+            id="engine"
             label="Engine Condition"
             options={["40%", "50%", "60%", "70%", "80%", "90%", "100%"]}
-            value={formData.carEngineCondition}
+            value={formData.engine}
             onChange={handleChange}
             required
           />
@@ -228,7 +195,7 @@ const CarDetailsForm = () => {
           </Cta>
         </form>
         <div className="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-8 gap-2 mt-3">
-          {formData.image.map((image, index) => (
+          {formData.images.map((image, index) => (
             <div
               key={index}
               className="relative w-full h-20 sm:h-24 border rounded"
@@ -237,7 +204,7 @@ const CarDetailsForm = () => {
                 src={image}
                 alt={`Uploaded ${index + 1}`}
                 layout="fill"
-                className="rounded w-full"
+                className="rounded w-full object-cover"
               />
             </div>
           ))}
