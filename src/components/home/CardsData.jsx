@@ -1,9 +1,7 @@
 "use client";
-import { CARD_DATA_LIST } from "@/utils/helper";
-import Image from "next/image";
+import { useState } from "react";
 import Cta from "../common/Cta";
 import Icons from "../common/Icons";
-import { useState } from "react";
 import NotFoundData from "../common/NotFoundData";
 
 const CardsData = ({ showData }) => {

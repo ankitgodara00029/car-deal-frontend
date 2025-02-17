@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 const Header = () => {
   const pathname = usePathname();
 
-  const phoneNumber = "+919992911029";
+  const phoneNumber = "+9199922222";
   const message = "Hello, I would like to know more about your services!";
   const handleWhatsAppClick = () => {
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(

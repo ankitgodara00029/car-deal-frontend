@@ -6,7 +6,6 @@ const About = () => {
   return (
     <div>
       <Hero />
-
       <ContactUs />
       <Faq />
     </div>

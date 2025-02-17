@@ -1,4 +1,3 @@
-import React from "react";
 import Cta from "./Cta";
 
 const ContactUs = () => {

@@ -42,9 +42,7 @@ const CarDetailsForm = () => {
 
   // Handle form submission
   const handleSubmit = async (e) => {
-    // Add async keyword
     e.preventDefault();
-
     const data = {
       data: {
         // images: [],
@@ -96,7 +94,7 @@ const CarDetailsForm = () => {
       });
 
       if (fileInputRef.current) {
-        fileInputRef.current.value = ""; // Reset file input
+        fileInputRef.current.value = "";
       }
     } catch (error) {
       console.error("Error submitting form:", error);

@@ -1,5 +1,4 @@
 "use client";
-import Image from "next/image";
 import { useState } from "react";
 import "swiper/css";
 import "swiper/css/effect-fade";

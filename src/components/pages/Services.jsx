@@ -1,10 +1,9 @@
 import { SERVICES_LIST } from "@/utils/helper";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
-import Hero from "../home/Hero";
 import ContactUs from "../common/ContactUs";
 import Faq from "../common/Faq";
+import Hero from "../home/Hero";
 
 const Services = () => {
   return (

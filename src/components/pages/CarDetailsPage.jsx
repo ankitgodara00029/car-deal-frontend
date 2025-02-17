@@ -1,7 +1,6 @@
-import React from "react";
 import CarDetailsForm from "../common/CarDetailsForm";
-import Faq from "../common/Faq";
 import ContactUs from "../common/ContactUs";
+import Faq from "../common/Faq";
 import Hero from "../home/Hero";
 
 const CarDetailsPage = () => {

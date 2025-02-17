@@ -1,11 +1,10 @@
 "use client";
-import { CARD_DATA_LIST } from "@/utils/helper";
 import { useParams } from "next/navigation";
+import { useEffect, useState } from "react";
 import ContactUs from "../common/ContactUs";
 import Faq from "../common/Faq";
 import NotFoundData from "../common/NotFoundData";
 import ThemeSlider from "./ThemeSlider";
-import { useEffect, useState } from "react";
 
 const DetailsPages = () => {
   const [showData, setShowData] = useState(null);
