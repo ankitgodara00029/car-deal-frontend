@@ -286,6 +286,20 @@ const CarDetailsForm = () => {
               key={index}
               className="relative w-full h-20 sm:h-24 border rounded"
             >
+              <span
+                onClick={() => {
+                  const updatedImages = formData.images.filter(
+                    (_, i) => i !== index
+                  );
+                  setFormData((prevData) => ({
+                    ...prevData,
+                    images: updatedImages,
+                  }));
+                }}
+                className="border bg-white rounded-full size-5 flex justify-center items-center absolute top-1 end-1 translate-x-1/2 -translate-y-1/2 z-[1] cursor-pointer text-sm"
+              >
+                X
+              </span>
               <Image
                 src={image}
                 alt={`Uploaded ${index + 1}`}
