@@ -8,6 +8,7 @@ import NotFoundData from "../common/NotFoundData";
 
 const CardsData = ({ showData }) => {
   const [searchTerm, setSearchTerm] = useState("");
+
   // const filteredCards = CARD_DATA_LIST.filter(
   //   (obj) =>
   //     obj.carName.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -48,7 +49,8 @@ const CardsData = ({ showData }) => {
                 >
                   <div className="h-[240px] lg:h-[210px] xl:h-[250px] flex items-center border-b overflow-hidden">
                     <img
-                      src={`http://localhost:1337${obj?.images[0].url}`}
+                      // src={`http://localhost:1337${obj?.images[0].url}`}
+                      src="/assets/images/webp/alto.webp"
                       alt="scorpio"
                       width={300}
                       height={300}

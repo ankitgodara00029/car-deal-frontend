@@ -47,6 +47,7 @@ const CarDetailsForm = () => {
 
     const data = {
       data: {
+        // images: [],
         name: formData.name,
         number: formData.number,
         car: formData.car,
@@ -165,7 +166,7 @@ const CarDetailsForm = () => {
           <CommonSelect
             id="fuel"
             label="Fuel Type"
-            options={["Petrol", "Diesel", "Electric", "Hybrid"]}
+            options={["Petrol", "Diesel", "Electric", "Hybrid", "CNG", "LPG"]}
             value={formData.fuel}
             onChange={handleChange}
             required
@@ -182,7 +183,18 @@ const CarDetailsForm = () => {
           <CommonSelect
             id="original"
             label="Original Condition (%)"
-            options={["40%", "50%", "60%", "70%", "80%", "90%", "100%"]}
+            options={[
+              "10%",
+              "20%",
+              "30%",
+              "40%",
+              "50%",
+              "60%",
+              "70%",
+              "80%",
+              "90%",
+              "100%",
+            ]}
             value={formData.original}
             onChange={handleChange}
             required
@@ -190,7 +202,18 @@ const CarDetailsForm = () => {
           <CommonSelect
             id="tyre"
             label="Tyre Condition (%)"
-            options={["40%", "50%", "60%", "70%", "80%", "90%", "100%"]}
+            options={[
+              "10%",
+              "20%",
+              "30%",
+              "40%",
+              "50%",
+              "60%",
+              "70%",
+              "80%",
+              "90%",
+              "100%",
+            ]}
             value={formData.tyre}
             onChange={handleChange}
             required
@@ -198,7 +221,18 @@ const CarDetailsForm = () => {
           <CommonSelect
             id="interior"
             label="Interior Condition"
-            options={["40%", "50%", "60%", "70%", "80%", "90%", "100%"]}
+            options={[
+              "10%",
+              "20%",
+              "30%",
+              "40%",
+              "50%",
+              "60%",
+              "70%",
+              "80%",
+              "90%",
+              "100%",
+            ]}
             value={formData.interior}
             onChange={handleChange}
             required
@@ -206,7 +240,18 @@ const CarDetailsForm = () => {
           <CommonSelect
             id="engine"
             label="Engine Condition"
-            options={["40%", "50%", "60%", "70%", "80%", "90%", "100%"]}
+            options={[
+              "10%",
+              "20%",
+              "30%",
+              "40%",
+              "50%",
+              "60%",
+              "70%",
+              "80%",
+              "90%",
+              "100%",
+            ]}
             value={formData.engine}
             onChange={handleChange}
             required

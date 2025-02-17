@@ -22,7 +22,7 @@ const CommonSelect = ({
           value={value}
           onChange={onChange}
           required={required}
-          className="w-full border rounded p-2 outline-none text-sm"
+          className="w-full border rounded p-2 outline-none text-sm cursor-pointer"
         >
           <option value="" disabled>
             Select {label}

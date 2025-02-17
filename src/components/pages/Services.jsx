@@ -19,7 +19,12 @@ const Services = () => {
         <div className="grid gap-2 sm:gap-3 grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 mt-4">
           {SERVICES_LIST.map((obj, index) => {
             return (
-              <Link href="#" key={index}>
+              <Link
+                href={`/?service=${obj.title
+                  .toLowerCase()
+                  .replace(/\s+/g, "-")}`}
+                key={index}
+              >
                 <div className="bg-white border shadow-md hover:shadow-xl duration-300">
                   <Image
                     src={obj.image}
