@@ -13,8 +13,10 @@ const CardsData = ({ showData }) => {
   //     obj.carModel.toString().toLowerCase().includes(searchTerm.toLowerCase())
   // );
   const filteredCards = showData?.data?.filter((obj) =>
-    Object.values(obj).some((value) =>
-      value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    Object.values(obj).some(
+      (value) =>
+        value != null &&
+        value.toString().toLowerCase().includes(searchTerm.toLowerCase())
     )
   );
   return (

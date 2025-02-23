@@ -1,5 +1,5 @@
 "use client";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import ContactUs from "../common/ContactUs";
 import Faq from "../common/Faq";
@@ -7,6 +7,7 @@ import NotFoundData from "../common/NotFoundData";
 import ThemeSlider from "./ThemeSlider";
 
 const DetailsPages = () => {
+  const pathname = usePathname();
   const [showData, setShowData] = useState(null);
 
   useEffect(() => {
@@ -33,6 +34,16 @@ const DetailsPages = () => {
   if (!car) {
     return <NotFoundData />;
   }
+
+  //
+  const phoneNumber = "+919992911029";
+  const message = `https://car-sell-alpha.vercel.app${pathname}`;
+  const handleWhatsAppClick = () => {
+    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
+      message
+    )}`;
+    window.open(url, "_blank");
+  };
   return (
     <>
       <div className="container mx-auto max-w-[1180px] px-5 py-8 md:py-10">
@@ -40,11 +51,11 @@ const DetailsPages = () => {
           <div>
             <ThemeSlider imageData={car?.images} />
           </div>
-          <div className="shadow-lg rounded-xl py-4 sm:py-6 border">
-            <h2 className="text-2xl sm:text-3xl font-semibold px-4 sm:px-6">
-              {car.car}
+          <div className="shadow-lg rounded-xl py-4 sm:py-5 border">
+            <h2 className="text-2xl sm:text-2xl font-semibold px-4 sm:px-6 flex justify-between items-center">
+              {car.car} <button onClick={handleWhatsAppClick} className="text-sm">{"Copy"}</button>
             </h2>
-            <div className="mt-4">
+            <div className="mt-3">
               <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
                 <span>Price:</span> <span>₹{car.price}</span>
               </p>
