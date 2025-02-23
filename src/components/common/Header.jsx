@@ -18,11 +18,11 @@ const Header = () => {
   return (
     <div className="bg-[#1f2937] py-3 md:py-4 md:sticky top-0 z-10">
       <div className="container mx-auto max-w-[1180px] px-5 flex justify-between items-center">
-        <Link href="#" className="text-white text-xl">
+        <Link href="/" className="text-white text-xl">
           Logo
         </Link>
         <ul
-          className={`flex gap-6 items-center max-md:justify-between max-md:pe-5 max-md:fixed max-md:bottom-0 z-30 max-md:w-full start-0 max-md:bg-[#1f2937] max-md:items-start max-md:ps-6 max-md:py-4 transition-all duration-300`}
+          className={`flex gap-3 sm:gap-6 items-center max-md:justify-between max-md:pe-5 max-md:fixed max-md:bottom-0 z-30 max-md:w-full start-0 max-md:bg-[#1f2937] max-md:items-start max-md:ps-6 max-md:py-3 transition-all duration-300`}
         >
           {NAV_LIST.map((obj, index) => {
             const basePath = obj.url.split("?")[0];
@@ -31,7 +31,7 @@ const Header = () => {
               <li key={index}>
                 <Link
                   href={obj.url}
-                  className={`text-white font-medium transition-all duration-300 ${
+                  className={`text-white font-medium transition-all text-sm sm:text-base duration-300 ${
                     isActive ? "!text-[#ff5e00]" : "hover:text-[#ff5e00]"
                   }`}
                 >

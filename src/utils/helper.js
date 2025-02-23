@@ -1,9 +1,9 @@
 // NAVBAR LINKS
 export const NAV_LIST = [
   { url: "/", link: "Home" },
-  { url: "/about", link: "About" },
-  { url: "/services", link: "Services" },
-  { url: "/contact", link: "Upload Car" },
+  { url: "/about", link: "About Us" },
+  { url: "/services", link: "Our Services" },
+  { url: "/contact", link: "Post Your Car" },
 ];
 // FAQ LIST
 export const FAQ_LIST = [

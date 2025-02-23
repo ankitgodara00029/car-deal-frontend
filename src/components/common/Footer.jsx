@@ -40,7 +40,7 @@ const Footer = () => {
                 href="/about"
                 className="text-white opacity-70 hover:opacity-100 transition-all ease-in-out duration-300"
               >
-                About
+                About Us
               </Link>
             </li>
             <li>
@@ -50,7 +50,7 @@ const Footer = () => {
                 href="/contact"
                 className="text-white opacity-70 hover:opacity-100 transition-all ease-in-out duration-300"
               >
-                Contact
+                Post Your Car
               </Link>
             </li>
             <li>
@@ -60,7 +60,7 @@ const Footer = () => {
                 href="/services"
                 className="text-white opacity-70 hover:opacity-100 transition-all ease-in-out duration-300"
               >
-                Services
+                Our Services
               </Link>
             </li>
           </ul>
