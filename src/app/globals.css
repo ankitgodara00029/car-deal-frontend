@@ -10,7 +10,7 @@ body {
   width: 5px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #ff5e00;
+  background: #ff5e00;  
 }
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
