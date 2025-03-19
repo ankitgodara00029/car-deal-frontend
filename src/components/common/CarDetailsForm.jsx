@@ -7,7 +7,7 @@ import Cta from "./Cta";
 
 const CarDetailsForm = () => {
   const [formData, setFormData] = useState({
-    images: [],
+    images: [], 
     name: "",
     number: "",
     car: "",
