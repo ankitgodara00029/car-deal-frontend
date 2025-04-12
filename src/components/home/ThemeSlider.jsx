@@ -7,8 +7,20 @@ import "swiper/css/navigation";
 import "swiper/css/thumbs";
 import { EffectFade, FreeMode, Navigation, Thumbs } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
+// import LIGHTBOX
+import { SlideshowLightbox } from "lightbox.js-react";
 const ThemeSlider = ({ imageData }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedImages, setSelectedImages] = useState([]);
+  const handleImageClick = (images) => {
+    setSelectedImages(
+      images.map((img) => ({
+        src: `http://localhost:1337${img.url}`,
+      }))
+    );
+    setIsOpen(true);
+  };
   return (
     <>
       <Swiper
@@ -26,13 +38,14 @@ const ThemeSlider = ({ imageData }) => {
         {imageData?.map((obj, index) => {
           return (
             <SwiperSlide key={index}>
-              <div className="bg-white rounded-lg overflow-hidden relative h-[270px] sm:h-[400px] md:h-[500px] lg:h-[428px] border border-black border-opacity-10 flex items-center justify-center">
+              <div className="bg-white rounded-lg overflow-hidden relative h-[270px] sm:h-[400px] md:h-[500px] lg:h-[428px] xl:h-[450px] border border-black border-opacity-10 flex items-center justify-center cursor-pointer">
                 <img
                   src={`http://localhost:1337${obj.url}`}
                   alt="theme"
                   className="w-full"
                   width={500}
                   height={500}
+                  onClick={() => handleImageClick(imageData)}
                 />
               </div>
             </SwiperSlide>
@@ -51,7 +64,7 @@ const ThemeSlider = ({ imageData }) => {
         {imageData?.map((obj, index) => {
           return (
             <SwiperSlide key={index}>
-              <div className="bg-white rounded-md overflow-hidden border border-black border-opacity-10 flex items-center justify-center cursor-pointer h-[42px] sm:h-[70px] md:h-[93px] lg:h-[60px] xl:h-[69px]">
+              <div className="bg-white rounded-md overflow-hidden border border-black border-opacity-10 flex items-center justify-center cursor-pointer h-[42px] sm:h-[70px] md:h-[93px] lg:h-[60px] xl:h-[90px]">
                 <img
                   src={`http://localhost:1337${obj.url}`}
                   alt="theme"
@@ -64,6 +77,13 @@ const ThemeSlider = ({ imageData }) => {
           );
         })}
       </Swiper>
+      <SlideshowLightbox
+        images={selectedImages}
+        showThumbnails={true}
+        open={isOpen}
+        lightboxIdentifier="lbox1"
+        onClose={() => setIsOpen(false)}
+      />
     </>
   );
 };

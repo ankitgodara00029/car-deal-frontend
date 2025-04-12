@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { Suspense, useEffect, useState } from "react";
 import ContactUs from "../common/ContactUs";
 import Faq from "../common/Faq";
 import CardsData from "../home/CardsData";
@@ -11,9 +11,12 @@ const HomePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const data = await fetch("http://localhost:1337/api/car-data-form?populate=images", {
-          method: "GET",
-        });
+        const data = await fetch(
+          "http://localhost:1337/api/car-data-form?populate=images",
+          {
+            method: "GET",
+          }
+        );
         const result = await data.json();
         setShowData(result);
       } catch (error) {
@@ -26,8 +29,18 @@ const HomePage = () => {
   }, []);
   return (
     <div>
-      <Hero />
-      <CardsData showData={showData} />
+      <Hero
+        title={
+          <>
+            Your Trusted <br />
+            <span className="text-[#ff5e00]">Marketplace</span> for Cars!
+          </>
+        }
+        description="Find the perfect car or sell yours at the best price—all in one place."
+      />
+      <Suspense fallback={<div>Loading...</div>}>
+        <CardsData showData={showData} />
+      </Suspense>
       <ContactUs />
       <Faq />
     </div>

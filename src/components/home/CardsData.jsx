@@ -1,4 +1,6 @@
 "use client";
+import Image from "next/image";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import Cta from "../common/Cta";
 import Icons from "../common/Icons";
@@ -6,19 +8,35 @@ import NotFoundData from "../common/NotFoundData";
 
 const CardsData = ({ showData }) => {
   const [searchTerm, setSearchTerm] = useState("");
+  const [visibleCount, setVisibleCount] = useState(12);
+  const [loading, setLoading] = useState(false);
 
-  // const filteredCards = CARD_DATA_LIST.filter(
-  //   (obj) =>
-  //     obj.carName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-  //     obj.carModel.toString().toLowerCase().includes(searchTerm.toLowerCase())
-  // );
-  const filteredCards = showData?.data?.filter((obj) =>
-    Object.values(obj).some(
+  const searchParams = useSearchParams();
+  const serviceValue = searchParams.get("service")?.toLowerCase(); // Get service from query
+  const filteredCards = showData?.data?.filter((obj) => {
+    const matchesSearch = Object.values(obj).some(
       (value) =>
         value != null &&
         value.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+    );
+    // If service query param exists, ensure obj has a matching service property
+    const matchesService =
+      serviceValue == null ||
+      Object.values(obj).some(
+        (value) =>
+          value != null && value.toString().toLowerCase().includes(serviceValue)
+      );
+
+    return matchesSearch && matchesService;
+  });
+  // Function to show more items with a loading effect
+  const handleSeeMore = () => {
+    setLoading(true); // Start loader
+    setTimeout(() => {
+      setVisibleCount((prev) => prev + 3);
+      setLoading(false); // Stop loader after 2s
+    }, 2000);
+  };
   return (
     <div className="container mx-auto max-w-[1180px] px-5 py-8 md:py-10">
       <div className="bg-white w-full py-3 px-3 font-semibold text-sm shadow flex items-center">
@@ -41,39 +59,84 @@ const CardsData = ({ showData }) => {
       {filteredCards?.length > 0 ? (
         <>
           <div className="grid gap-4 lg:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-8">
-            {filteredCards?.map((obj, index) => {
-              return (
-                <div
-                  className="border rounded-lg overflow-hidden hover:shadow-lg transition-all ease-in-out duration-300 max-sm:max-w-[380px] max-sm:w-full max-sm:mx-auto"
-                  key={index}
-                >
-                  <div className="h-[240px] lg:h-[210px] xl:h-[250px] flex items-center border-b overflow-hidden">
-                    <img
-                      // src={`http://localhost:1337${obj?.images[0].url}`}
-                      src="/assets/images/webp/alto.webp"
-                      alt="scorpio"
-                      width={300}
-                      height={300}
-                      className="w-full object-cover"
-                    />
-                  </div>
-                  <div className="p-3 sm:p-4">
-                    <h2 className="pb-2 font-bold text-xl sm:text-2xl line-clamp-1">
-                      {obj.car}
-                    </h2>
-                    <div className="flex justify-between pb-1">
-                      <p className="text-base sm:text-lg">₹ {obj.price}</p>
-                      <p className="text-base sm:text-lg">Model: {obj.model}</p>
-                    </div>
-                    <div className="flex justify-between pb-3">
-                      <p className="text-base sm:text-lg">Fuel: {obj.fuel}</p>
-                    </div>
-                    <Cta url={`${index}`}>View Complete Details</Cta>
-                  </div>
+            {filteredCards.slice(0, visibleCount).map((obj, index) => (
+              <div
+                className="border rounded-lg overflow-hidden hover:shadow-lg transition-all ease-in-out duration-300 max-sm:max-w-[380px] max-sm:w-full max-sm:mx-auto"
+                key={index}
+              >
+                <div className="h-[220px] lg:h-[210px] xl:h-[250px] flex items-center border-b overflow-hidden">
+                  <img
+                    src={
+                      obj?.images?.[0]?.url
+                        ? `http://localhost:1337${obj.images[0].url}`
+                        : "/assets/images/webp/alto.webp"
+                    }
+                    alt="scorpio"
+                    width={300}
+                    height={300}
+                    className="w-full object-cover"
+                  />
                 </div>
-              );
-            })}
+                <div className="p-3 sm:p-4">
+                  <h2 className="pb-2 font-bold text-xl sm:text-2xl line-clamp-1">
+                    {obj.car}
+                  </h2>
+                  <div className="flex justify-between pb-1">
+                    <p className="text-base sm:text-lg">₹ {obj.price}</p>
+                    <p className="text-base sm:text-lg">Model: {obj.model}</p>
+                  </div>
+                  <div className="flex justify-between pb-3">
+                    <p className="text-base sm:text-lg">Fuel: {obj.fuel}</p>
+                    <span
+                      className="size-6 cursor-pointer"
+                      onClick={() => {
+                        if (navigator.share) {
+                          navigator
+                            .share({
+                              title: "Check this out!",
+                              text: "Here is the document ID you might need:",
+                              url:
+                                window.location.origin + "/" + obj.documentId, // Adjust URL structure as needed
+                            })
+                            .catch((error) =>
+                              console.error("Error sharing:", error)
+                            );
+                        } else {
+                          navigator.clipboard.writeText(
+                            window.location.origin + "/" + obj.documentId
+                          );
+                          alert("Link copied to clipboard!");
+                        }
+                      }}
+                    >
+                      <Image
+                        src="/assets/images/svg/share-icon.svg"
+                        alt="share"
+                        width={24}
+                        height={24}
+                        className="w-full"
+                      />
+                    </span>
+                  </div>
+                  <Cta url={`/${obj.documentId}`}>View Complete Details</Cta>
+                </div>
+              </div>
+            ))}
           </div>
+          {visibleCount < filteredCards.length && (
+            <div className="flex justify-center">
+              {loading ? (
+                <div className="loader mt-4"></div>
+              ) : (
+                <Cta
+                  className="!w-auto mx-auto mt-4 px-4"
+                  onClick={handleSeeMore}
+                >
+                  See More
+                </Cta>
+              )}
+            </div>
+          )}
         </>
       ) : (
         <NotFoundData />

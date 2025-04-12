@@ -1,13 +1,27 @@
 "use client";
 import Image from "next/image";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
+import { Slide, toast, ToastContainer } from "react-toastify";
 import CommonInput from "./CommonInput";
 import CommonSelect from "./CommonSelect";
 import Cta from "./Cta";
+import CustomPopup from "./CustomPopup";
 
 const CarDetailsForm = () => {
+  const [showPopup, setShowPopup] = useState(false);
+  useEffect(() => {
+    if (showPopup) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+
+    return () => {
+      document.body.classList.remove("overflow-hidden");
+    };
+  }, [showPopup]);
   const [formData, setFormData] = useState({
-    images: [], 
+    images: [],
     name: "",
     number: "",
     car: "",
@@ -27,41 +41,70 @@ const CarDetailsForm = () => {
   // Handle form input changes
   const handleChange = (e) => {
     const { id, value } = e.target;
-    setFormData({ ...formData, [id]: value });
+    setFormData((prevData) => ({ ...prevData, [id]: value }));
   };
 
   // Handle file selection
   const handleFileChange = (e) => {
     const files = Array.from(e.target.files);
-    const imageUrls = files.map((file) => URL.createObjectURL(file));
     setFormData((prevData) => ({
       ...prevData,
-      images: [...prevData.images, ...imageUrls],
+      images: files, // Replace previous images with new ones
     }));
   };
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const data = {
-      data: {
-        // images: [],
-        name: formData.name,
-        number: formData.number,
-        car: formData.car,
-        price: formData.price,
-        model: formData.model,
-        owner: formData.owner,
-        fuel: formData.fuel,
-        kilometers: formData.kilometers,
-        original: formData.original,
-        tyre: formData.tyre,
-        interior: formData.interior,
-        engine: formData.engine,
-      },
-    };
+    setShowPopup(true);
+  };
 
+  // Handle form submission
+  const handleConfirm = async (e) => {
+    setShowPopup(false);
     try {
+      const formDataToSend = new FormData();
+
+      // Append all images
+      formData.images.forEach((file) => {
+        formDataToSend.append("files", file);
+      });
+
+      // First, upload images to Strapi
+      const uploadResponse = await fetch("http://localhost:1337/api/upload", {
+        method: "POST",
+        body: formDataToSend,
+      });
+
+      if (!uploadResponse.ok) {
+        throw new Error(
+          `Image upload failed! Status: ${uploadResponse.status}`
+        );
+      }
+
+      const uploadedImages = await uploadResponse.json();
+
+      // Extract image IDs from the response
+      const imageIds = uploadedImages.map((img) => img.id);
+
+      // Now submit the form with image IDs
+      const data = {
+        data: {
+          name: formData.name,
+          number: formData.number,
+          car: formData.car,
+          price: formData.price,
+          model: formData.model,
+          owner: formData.owner,
+          fuel: formData.fuel,
+          kilometers: formData.kilometers,
+          original: formData.original,
+          tyre: formData.tyre,
+          interior: formData.interior,
+          engine: formData.engine,
+          images: imageIds, // Send image IDs to Strapi
+        },
+      };
+
       const response = await fetch("http://localhost:1337/api/car-data-form", {
         method: "POST",
         headers: {
@@ -71,10 +114,11 @@ const CarDetailsForm = () => {
       });
 
       if (!response.ok) {
-        throw new Error(`HTTP error! Status: ${response.status}`);
+        throw new Error(`Form submission failed! Status: ${response.status}`);
       }
 
       await response.json();
+      toast.success("Your Data submitted successfully");
 
       // Reset form state
       setFormData({
@@ -103,6 +147,11 @@ const CarDetailsForm = () => {
 
   return (
     <div className="py-8 md:py-12 px-5 relative">
+      <div
+        id="car-details-form"
+        className="absolute -top-0 sm:-top-14 left-0"
+      ></div>
+      <ToastContainer position="top-right" transition={Slide} />
       <div className="container mx-auto border shadow-md bg-white max-w-[1180px] px-5 py-6 rounded-lg">
         <h2 className="text-3xl sm:text-4xl font-semibold text-center mb-4 md:mb-6">
           Car <span className="text-[#ff5e00]">Details</span> Form
@@ -113,16 +162,17 @@ const CarDetailsForm = () => {
         >
           <CommonInput
             id="name"
+            placeholder="Enter Name"
             label="Name"
-            placeholder="Enter your name"
             value={formData.name}
             onChange={handleChange}
             required
           />
           <CommonInput
+            type="number"
             id="number"
+            placeholder="Enter Phone Number"
             label="Phone"
-            placeholder="Enter your Number"
             value={formData.number}
             onChange={handleChange}
             required
@@ -130,7 +180,7 @@ const CarDetailsForm = () => {
           <CommonInput
             id="car"
             label="Car Name"
-            placeholder="Enter car name"
+            placeholder="Enter Car Name"
             value={formData.car}
             onChange={handleChange}
             required
@@ -139,7 +189,7 @@ const CarDetailsForm = () => {
             id="price"
             type="number"
             label="Price"
-            placeholder="Enter car price"
+            placeholder="Enter Price"
             value={formData.price}
             onChange={handleChange}
             required
@@ -148,7 +198,7 @@ const CarDetailsForm = () => {
             id="model"
             label="Model"
             type="number"
-            placeholder="Enter car model"
+            placeholder="Enter Model"
             value={formData.model}
             onChange={handleChange}
             required
@@ -172,8 +222,8 @@ const CarDetailsForm = () => {
           <CommonInput
             id="kilometers"
             type="number"
+            placeholder="Enter Kilometers"
             label="Kilometers Driven"
-            placeholder="Enter kilometers driven"
             value={formData.kilometers}
             onChange={handleChange}
             required
@@ -267,8 +317,10 @@ const CarDetailsForm = () => {
               type="file"
               id="upload-file"
               multiple
+              required
               accept="image/*"
               onChange={handleFileChange}
+              onClick={(e) => (e.target.value = null)}
               className="hidden"
               ref={fileInputRef}
             />
@@ -278,7 +330,6 @@ const CarDetailsForm = () => {
             Submit
           </Cta>
         </form>
-
         {/* Image Preview */}
         <div className="grid grid-cols-4 sm:grid-cols-5 lg:grid-cols-8 gap-2 mt-3">
           {formData.images.map((image, index) => (
@@ -298,10 +349,15 @@ const CarDetailsForm = () => {
                 }}
                 className="border bg-white rounded-full size-5 flex justify-center items-center absolute top-1 end-1 translate-x-1/2 -translate-y-1/2 z-[1] cursor-pointer text-sm"
               >
-                X
+                <Image
+                  src="/assets/images/svg/close-icon.svg"
+                  alt="close"
+                  width={10}
+                  height={10}
+                />
               </span>
               <Image
-                src={image}
+                src={URL.createObjectURL(image)} // Create object URL for preview
                 alt={`Uploaded ${index + 1}`}
                 layout="fill"
                 className="rounded w-full object-cover"
@@ -310,6 +366,12 @@ const CarDetailsForm = () => {
           ))}
         </div>
       </div>
+      {showPopup && (
+        <CustomPopup
+          handleConfirm={handleConfirm}
+          setShowPopup={setShowPopup}
+        />
+      )}
     </div>
   );
 };

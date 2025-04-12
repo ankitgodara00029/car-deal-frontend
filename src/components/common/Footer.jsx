@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import Icons from "./Icons";
 const Footer = () => {
@@ -12,7 +13,13 @@ const Footer = () => {
             aria-label="ak-logo"
             className="text-white text-xl sm:text-2xl inline-block"
           >
-            logo
+            <Image
+              src="/assets/images/svg/logo.svg"
+              alt="logo"
+              width={90}
+              height={50}
+              className="w-[70px] md:w-[90px]"
+            />
           </Link>
           <p className="text-white opacity-70 !leading-[150%] mt-3 text-sm max-w-[320px]">
             We are dedicated to connecting buyers and sellers for a seamless car
@@ -22,7 +29,7 @@ const Footer = () => {
         </div>
         <div className="w-4/12 lg:w-2/12 text-white">
           <ul className="flex flex-col gap-3 lg:gap-4">
-            <li>Quick Links</li>
+            <li>Links</li>
             <li>
               <Link
                 rel="noopener noreferrer"
@@ -37,7 +44,7 @@ const Footer = () => {
               <Link
                 rel="noopener noreferrer"
                 aria-label="links"
-                href="/about"
+                href="/about-us"
                 className="text-white opacity-70 hover:opacity-100 transition-all ease-in-out duration-300"
               >
                 About Us
@@ -47,20 +54,20 @@ const Footer = () => {
               <Link
                 rel="noopener noreferrer"
                 aria-label="links"
-                href="/contact"
+                href="/our-services"
                 className="text-white opacity-70 hover:opacity-100 transition-all ease-in-out duration-300"
               >
-                Post Your Car
+                Our Services
               </Link>
             </li>
             <li>
               <Link
                 rel="noopener noreferrer"
                 aria-label="links"
-                href="/services"
+                href="/post-your-car"
                 className="text-white opacity-70 hover:opacity-100 transition-all ease-in-out duration-300"
               >
-                Our Services
+                Post Your Car
               </Link>
             </li>
           </ul>
@@ -82,7 +89,7 @@ const Footer = () => {
               <Link
                 rel="noopener noreferrer"
                 aria-label="links"
-                href="/terms-condition"
+                href="/terms-conditions"
                 className="text-white opacity-70 hover:opacity-100 transition-all ease-in-out duration-300"
               >
                 Terms & Conditions
@@ -125,10 +132,10 @@ const Footer = () => {
             <li className="text-white text-base">Contact Us</li>
             <li>
               <Link
-                href="tel:7015371814"
+                href="tel:9999999999"
                 className="text-white opacity-70 hover:opacity-100 transition-all ease-in-out duration-300"
               >
-                +91 7015371814
+                +91 9999999999
               </Link>
             </li>
             <li>
@@ -146,7 +153,7 @@ const Footer = () => {
         </div>
       </div>
       <div className="border-t border-t-white py-5 border-opacity-40 text-center text-sm md:text-base text-white">
-        Copyright @{currentYear} devguide.info. All Right reserved
+        Copyright {currentYear} car-deal.shop. All Right reserved
       </div>
     </div>
   );

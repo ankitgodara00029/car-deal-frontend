@@ -4,13 +4,14 @@
 @tailwind utilities;
 body {
   font-family: "Poppins", serif;
+  scroll-behavior: smooth !important;
 }
 
 ::-webkit-scrollbar {
   width: 5px;
 }
 ::-webkit-scrollbar-thumb {
-  background: #ff5e00;  
+  background: #ff5e00;
 }
 input[type="number"]::-webkit-inner-spin-button,
 input[type="number"]::-webkit-outer-spin-button {
@@ -31,4 +32,56 @@ input[type="number"] {
 }
 .swiper-button-next:after {
   font-size: 28px !important;
+}
+
+/* ==== CONTACT FORM ==== */
+.Toastify__progress-bar--success {
+  background: #ff5e00 !important;
+}
+.Toastify__toast-icon svg {
+  fill: #ff5e00 !important;
+}
+
+input:-webkit-autofill {
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: #374151;
+  transition: background-color 5000s ease-in-out 0s;
+  box-shadow: transparent;
+}
+/* LOADER */
+.loader {
+  width: 60px;
+  aspect-ratio: 2;
+  --_g: no-repeat radial-gradient(circle closest-side, #ff5e00 90%, #0000);
+  background: var(--_g) 0% 50%, var(--_g) 50% 50%, var(--_g) 100% 50%;
+  background-size: calc(100% / 3) 50%;
+  animation: l3 1s infinite linear;
+}
+@keyframes l3 {
+  20% {
+    background-position: 0% 0%, 50% 50%, 100% 50%;
+  }
+  40% {
+    background-position: 0% 100%, 50% 0%, 100% 50%;
+  }
+  60% {
+    background-position: 0% 50%, 50% 100%, 100% 0%;
+  }
+  80% {
+    background-position: 0% 50%, 50% 50%, 100% 100%;
+  }
+}
+/* PRELOADER */
+.preloader {
+  width: fit-content;
+  clip-path: inset(0 100% 0 0);
+  animation: l5 2.5s steps(20) forwards;
+}
+.preloader:before {
+  content: "Welcome To Car Deal";
+}
+@keyframes l5 {
+  to {
+    clip-path: inset(0 -1ch 0 0);
+  }
 }

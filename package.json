@@ -9,9 +9,11 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "lightbox.js-react": "^1.4.9",
     "next": "15.1.4",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
+    "react-toastify": "^11.0.5",
     "swiper": "^11.2.1",
     "tesseract.js": "^6.0.0"
   },
