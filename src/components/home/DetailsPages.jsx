@@ -16,7 +16,7 @@ const DetailsPages = () => {
 
   useEffect(() => {
     const fetchData = async () => {
-      try {
+      try { 
         const data = await fetch(
           "http://localhost:1337/api/car-data-form?populate=images",
           {
