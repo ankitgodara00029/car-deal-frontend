@@ -25,7 +25,7 @@ const Services = () => {
         </div>
         <div className="grid gap-2 sm:gap-3 grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 mt-4">
           {SERVICES_LIST.map((obj, index) => {
-            return (
+            return ( 
               <Link
                 // href={`/?service=${obj.title
                 //   .toLowerCase()
