@@ -1,6 +1,6 @@
 import CarDetailsPage from "@/components/pages/CarDetailsPage";
 export const metadata = {
-  metadataBase: "https://car-sell-alpha.vercel.app/",
+  metadataBase: "https://www.car-deal.shop/",
   title: "Post Your Car Sell in Minutes!",
   description:
     "Selling your car has never been easier! List your vehicle in just a few simple steps and connect with genuine buyers.",

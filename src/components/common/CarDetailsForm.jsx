@@ -9,8 +9,10 @@ import CustomPopup from "./CustomPopup";
 
 const CarDetailsForm = () => {
   const [showPopup, setShowPopup] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+
   useEffect(() => {
-    if (showPopup) {
+    if (showPopup || isLoading) {
       document.body.classList.add("overflow-hidden");
     } else {
       document.body.classList.remove("overflow-hidden");
@@ -19,7 +21,7 @@ const CarDetailsForm = () => {
     return () => {
       document.body.classList.remove("overflow-hidden");
     };
-  }, [showPopup]);
+  }, [showPopup, isLoading]);
   const [formData, setFormData] = useState({
     images: [],
     name: "",
@@ -61,6 +63,7 @@ const CarDetailsForm = () => {
   // Handle form submission
   const handleConfirm = async (e) => {
     setShowPopup(false);
+    setIsLoading(true); // Show loader
     try {
       const formDataToSend = new FormData();
 
@@ -70,10 +73,13 @@ const CarDetailsForm = () => {
       });
 
       // First, upload images to Strapi
-      const uploadResponse = await fetch("http://localhost:1337/api/upload", {
-        method: "POST",
-        body: formDataToSend,
-      });
+      const uploadResponse = await fetch(
+        "https://radiant-fellowship-7fbb005f57.strapiapp.com/api/upload",
+        {
+          method: "POST",
+          body: formDataToSend,
+        }
+      );
 
       if (!uploadResponse.ok) {
         throw new Error(
@@ -105,13 +111,16 @@ const CarDetailsForm = () => {
         },
       };
 
-      const response = await fetch("http://localhost:1337/api/car-data-form", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        "https://radiant-fellowship-7fbb005f57.strapiapp.com/api/car-data-form",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       if (!response.ok) {
         throw new Error(`Form submission failed! Status: ${response.status}`);
@@ -142,6 +151,8 @@ const CarDetailsForm = () => {
       }
     } catch (error) {
       console.error("Error submitting form:", error);
+    } finally {
+      setIsLoading(false); // Hide loader
     }
   };
 
@@ -354,13 +365,14 @@ const CarDetailsForm = () => {
                   alt="close"
                   width={10}
                   height={10}
+                  className="pointer-events-none"
                 />
               </span>
               <Image
                 src={URL.createObjectURL(image)} // Create object URL for preview
                 alt={`Uploaded ${index + 1}`}
                 layout="fill"
-                className="rounded w-full object-cover"
+                className="rounded w-full object-cover pointer-events-none"
               />
             </div>
           ))}
@@ -371,6 +383,11 @@ const CarDetailsForm = () => {
           handleConfirm={handleConfirm}
           setShowPopup={setShowPopup}
         />
+      )}
+      {isLoading && (
+        <div className="fixed top-0 left-0 w-full h-screen bg-black z-50 flex justify-center items-center bg-opacity-50">
+          <div className="loader mt-4"></div>
+        </div>
       )}
     </div>
   );

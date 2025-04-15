@@ -18,7 +18,7 @@ const Footer = () => {
               alt="logo"
               width={90}
               height={50}
-              className="w-[70px] md:w-[90px]"
+              className="w-[70px] md:w-[90px] pointer-events-none"
             />
           </Link>
           <p className="text-white opacity-70 !leading-[150%] mt-3 text-sm max-w-[320px]">
@@ -132,10 +132,10 @@ const Footer = () => {
             <li className="text-white text-base">Contact Us</li>
             <li>
               <Link
-                href="tel:9999999999"
+                href="tel:9588546573"
                 className="text-white opacity-70 hover:opacity-100 transition-all ease-in-out duration-300"
               >
-                +91 9999999999
+                +919588546573
               </Link>
             </li>
             <li>
@@ -146,7 +146,7 @@ const Footer = () => {
                 href="mailto:ak.technical.co@gmail.com"
                 className="text-white opacity-70 hover:opacity-100 transition-all ease-in-out duration-300"
               >
-                ak.technical.co@gmail.com
+                car-deal0029@gmail.com
               </Link>
             </li>
           </ul>

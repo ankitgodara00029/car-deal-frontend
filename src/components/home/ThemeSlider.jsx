@@ -16,7 +16,7 @@ const ThemeSlider = ({ imageData }) => {
   const handleImageClick = (images) => {
     setSelectedImages(
       images.map((img) => ({
-        src: `http://localhost:1337${img.url}`,
+        src: `https://radiant-fellowship-7fbb005f57.media.strapiapp.com/${img.url}`,
       }))
     );
     setIsOpen(true);
@@ -40,7 +40,7 @@ const ThemeSlider = ({ imageData }) => {
             <SwiperSlide key={index}>
               <div className="bg-white rounded-lg overflow-hidden relative h-[270px] sm:h-[400px] md:h-[500px] lg:h-[428px] xl:h-[450px] border border-black border-opacity-10 flex items-center justify-center cursor-pointer">
                 <img
-                  src={`http://localhost:1337${obj.url}`}
+                  src={`https://radiant-fellowship-7fbb005f57.media.strapiapp.com/${obj.url}`}
                   alt="theme"
                   className="w-full"
                   width={500}
@@ -66,7 +66,7 @@ const ThemeSlider = ({ imageData }) => {
             <SwiperSlide key={index}>
               <div className="bg-white rounded-md overflow-hidden border border-black border-opacity-10 flex items-center justify-center cursor-pointer h-[42px] sm:h-[70px] md:h-[93px] lg:h-[60px] xl:h-[90px]">
                 <img
-                  src={`http://localhost:1337${obj.url}`}
+                  src={`https://radiant-fellowship-7fbb005f57.media.strapiapp.com/${obj.url}`}
                   alt="theme"
                   className="w-full"
                   width={90}

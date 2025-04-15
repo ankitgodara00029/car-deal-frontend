@@ -12,7 +12,7 @@ const HomePage = () => {
     const fetchData = async () => {
       try {
         const data = await fetch(
-          "http://localhost:1337/api/car-data-form?populate=images",
+          "https://radiant-fellowship-7fbb005f57.strapiapp.com/api/car-data-form?populate=images",
           {
             method: "GET",
           }

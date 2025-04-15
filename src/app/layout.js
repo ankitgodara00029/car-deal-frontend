@@ -4,7 +4,7 @@ import Header from "@/components/common/Header";
 import Preloader from "@/components/common/Preloader";
 import "./globals.css";
 export const metadata = {
-  metadataBase: "https://car-sell-alpha.vercel.app/",
+  metadataBase: "https://www.car-deal.shop/",
   title: "Your Trusted Marketplace for Cars!",
   description:
     "Find the perfect car or sell yours at the best price—all in one place.",

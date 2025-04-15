@@ -25,12 +25,11 @@ const Services = () => {
         </div>
         <div className="grid gap-2 sm:gap-3 grid-cols-3 sm:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 mt-4">
           {SERVICES_LIST.map((obj, index) => {
-            return ( 
+            return (
               <Link
-                // href={`/?service=${obj.title
-                //   .toLowerCase()
-                //   .replace(/\s+/g, "-")}`}
-                href="/"
+                href={`/?service=${obj.title
+                  .toLowerCase()
+                  .replace(/\s+/g, "-")}`}
                 key={index}
               >
                 <div className="bg-white border shadow-md hover:shadow-xl duration-300 h-full">
@@ -40,7 +39,7 @@ const Services = () => {
                     width={100}
                     height={100}
                     sizes="100vw"
-                    className="w-full object-cover h-[70px] sm:h-[90px] md:h-[100px] lg:h-[110px]"
+                    className="w-full object-cover h-[70px] sm:h-[90px] md:h-[100px] lg:h-[110px] pointer-events-none"
                   />
                   <div className="py-1 md:py-2 text-center border-t">
                     <p className="text-xs sm:text-sm lg:text-base font-semibold">

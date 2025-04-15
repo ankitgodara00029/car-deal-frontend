@@ -18,7 +18,7 @@ const DetailsPages = () => {
     const fetchData = async () => {
       try { 
         const data = await fetch(
-          "http://localhost:1337/api/car-data-form?populate=images",
+          "https://radiant-fellowship-7fbb005f57.strapiapp.com/api/car-data-form?populate=images",
           {
             method: "GET",
           }
@@ -42,7 +42,7 @@ const DetailsPages = () => {
   }
 
   // SHARE DETAILS
-  const phoneNumber = "+919999999999";
+  const phoneNumber = "+919588546573";
   const message = `https://car-sell-alpha.vercel.app${pathname}`;
   const handleWhatsAppClick = () => {
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
@@ -146,7 +146,7 @@ const DetailsPages = () => {
                     alt="share"
                     width={24}
                     height={24}
-                    className="w-full"
+                    className="w-full pointer-events-none"
                   />
                 </span>
                 <span className="cursor-pointer" onClick={handleCopy}>
@@ -171,13 +171,13 @@ const DetailsPages = () => {
                 <img
                   src={
                     obj?.images?.[0]?.url
-                      ? `http://localhost:1337${obj.images[0].url}`
+                      ? `https://radiant-fellowship-7fbb005f57.media.strapiapp.com/${obj.images[0].url}`
                       : "/assets/images/webp/alto.webp"
                   }
                   alt="scorpio"
                   width={300}
                   height={300}
-                  className="w-full object-cover"
+                  className="w-full object-cover pointer-events-none"
                 />
               </div>
               <div className="p-3 sm:p-4">

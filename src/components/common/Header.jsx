@@ -7,7 +7,7 @@ import Cta from "./Cta";
 const Header = () => {
   const pathname = usePathname();
 
-  const phoneNumber = "+919999999999";
+  const phoneNumber = "+919588546573";
   const message = "Hello, I would like to know more about your services!";
   const handleWhatsAppClick = () => {
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
@@ -25,7 +25,7 @@ const Header = () => {
             alt="logo"
             width={90}
             height={50}
-            className="w-[70px] md:w-[90px]"
+            className="w-[70px] md:w-[90px] pointer-events-none"
           />
         </Link>
         <ul
@@ -38,7 +38,7 @@ const Header = () => {
               <li key={index}>
                 <Link
                   href={obj.url}
-                  className={`text-white font-medium transition-all text-sm sm:text-base duration-300 ${
+                  className={`text-white font-medium transition-all text-sm sm:text-base duration-300 text-nowrap ${
                     isActive ? "!text-[#ff5e00]" : "hover:text-[#ff5e00]"
                   }`}
                 >

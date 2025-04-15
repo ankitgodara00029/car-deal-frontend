@@ -26,8 +26,8 @@ const PolicyConditions = ({ mapList }) => {
       })}
       <p className="text-sm sm:text-base text-black">
         📩 Have Questions? Contact Us at:&nbsp;
-        <Link href="tel:+9999999999" className="text-blue-400 underline">
-          9999999999
+        <Link href="tel:+919588546573" className="text-blue-400 underline">
+          9588546573
         </Link>
       </p>
     </div>

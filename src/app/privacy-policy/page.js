@@ -2,7 +2,7 @@ import Hero from "@/components/home/Hero";
 import PolicyConditions from "@/components/pages/PolicyConditions";
 import { PRIVACY_POLICY_LIST } from "@/utils/helper";
 export const metadata = {
-  metadataBase: "https://car-sell-alpha.vercel.app/",
+  metadataBase: "https://www.car-deal.shop/",
   title: "Privacy Policy Car Deal",
   description:
     "At Car Deal, we value your privacy and are committed to protecting your personal information. This policy explains how we collect, use, and protect your data.",

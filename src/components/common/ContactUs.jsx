@@ -16,8 +16,8 @@ const ContactUs = () => {
             : "Whether you’re a car enthusiast, a first-time buyer, or someone looking to sell their vehicle, we’re here to make the process smooth and stress-free. Start your journey with us today!"}
         </p>
         <Cta
-          url="tel:9999999999"
-          className="!w-[125px] mx-auto sm:!w-[136px] bg-white !text-[#ff5e00] px-5 !border !border-white hover:!bg-[#ff5e00] hover:!text-white"
+          url="tel:9588546573"
+          className="!w-[125px] mx-auto text-nowrap sm:!w-[136px] bg-white !text-[#ff5e00] px-5 !border !border-white hover:!bg-[#ff5e00] hover:!text-white"
         >
           Call Us Now
         </Cta>
