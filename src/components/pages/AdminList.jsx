@@ -1,29 +1,19 @@
 "use client";
 import { useEffect, useState } from "react";
 import Icons from "../common/Icons";
-const AdminList = () => {
+const AdminList = ({ initialCars }) => {
   const [showData, setShowData] = useState(null);
   const [searchTerm, setSearchTerm] = useState("");
+
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const data = await fetch(
-          "https://radiant-fellowship-7fbb005f57.strapiapp.com/api/car-data-form?populate=images",
-          {
-            method: "GET",
-          }
-        );
-        const result = await data.json();
-        setShowData(result);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
-    };
-    fetchData();
-    // const interval = setInterval(fetchData, 1000);
-    // return () => clearInterval(interval);
-  }, []);
-  const car = showData?.data?.filter((obj) =>
+    if (initialCars) {
+      setShowData(initialCars);
+    }
+  }, [initialCars]);
+
+  // Handle both array and object with data property
+  const carsArray = Array.isArray(showData) ? showData : showData?.data || [];
+  const car = carsArray.filter((obj) =>
     Object.values(obj).some(
       (value) =>
         value != null &&
@@ -48,13 +38,13 @@ const AdminList = () => {
         {car?.map((obj, index) => {
           return (
             <div className="border rounded-lg" key={index}>
-              <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
+              <p className="text-base leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
                 <span>Name:</span> <span>{obj.name}</span>
               </p>
-              <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
+              <p className="text-base leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
                 <span>Phone:</span> <span>{obj.number}</span>
               </p>
-              <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
+              <p className="text-base leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
                 <span>Upload Date:</span>
                 <span>
                   {new Date(obj.publishedAt).toLocaleDateString("en-US", {
@@ -64,50 +54,50 @@ const AdminList = () => {
                   })}
                 </span>
               </p>
-              <p className="text-base md:text-lg leading-[120%] text-black flex flex-col justify-between border-t py-2 px-4 sm:px-6">
-                <span>Document Id:</span> <span>{obj.documentId}</span>
+              <p className="text-base leading-[120%] text-black flex flex-col justify-between border-t py-2 px-4 sm:px-6">
+                <span>Document Id:</span> <span>{obj._id}</span>
               </p>
-              <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
+              <p className="text-base leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
                 <span>Price:</span> <span>₹{obj.price}</span>
               </p>
-              <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
+              <p className="text-base leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
                 <span>Model:</span> <span>{obj.model}</span>
               </p>
-              <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
+              <p className="text-base leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
                 <span>Owner:</span> <span>{obj.owner}</span>
               </p>
-              <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
+              <p className="text-base leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
                 <span>Fuel Type:</span> <span>{obj.fuel}</span>
               </p>
-              <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
+              <p className="text-base leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
                 <span>Kilometers Driven:</span> <span>{obj.kilometers}</span>
               </p>
-              <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
+              <p className="text-base leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
                 <span>Original:</span> <span>{obj.original}%</span>
               </p>
-              <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
+              <p className="text-base leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
                 <span>Tyre Condition:</span> <span>{obj.tyre}%</span>
               </p>
-              <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
+              <p className="text-base leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
                 <span>Interior Condition:</span>
                 <span>{obj.interior}%</span>
               </p>
-              <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
+              <p className="text-base leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
                 <span>Engine Condition:</span>
                 <span>{obj.engine}%</span>
               </p>
-              {obj?.images?.map((subObj, subIndex) => {
+              {/* {obj?.images?.map((subObj, subIndex) => {
                 return (
                   <p
                     key={subIndex}
-                    className="text-base md:text-lg leading-[120%] text-black flex flex-col justify-between border-t py-2 px-4 sm:px-6"
+                    className="text-base leading-[120%] text-black flex flex-col justify-between border-t py-2 px-4 sm:px-6"
                   >
                     <span>{subIndex + 1}</span>
                     <span>Image Document Id:</span>
                     <span>{subObj.documentId}</span>
                   </p>
                 );
-              })}
+              })} */}
             </div>
           );
         })}

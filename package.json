@@ -9,8 +9,10 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@sanity/image-url": "^1.2.0",
     "lightbox.js-react": "^1.4.9",
     "next": "15.1.4",
+    "next-sanity": "^10.0.15",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-toastify": "^11.0.5",

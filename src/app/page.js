@@ -1,20 +1,27 @@
-import HomePage from "@/components/pages/HomePage";
-export const metadata = {
-  metadataBase: "https://www.car-deal.shop/",
-  title: "Your Trusted Marketplace for Cars!",
-  description:
-    "Find the perfect car or sell yours at the best price—all in one place.",
-  openGraph: {
-    title: "Your Trusted Marketplace for Cars!",
-    description:
-      "Find the perfect car or sell yours at the best price—all in one place.",
-    images: ["/meta-image-home.webp"],
-  },
-};
-export default function Home() {
+import HomeSatiny from "@/components/pages/HomeSatiny";
+import { client } from "@/utils/sanity";
+
+export default async function HomePage() {
+  const cars = await client.fetch(`*[_type == "car"] | order(_createdAt desc){
+    _id,
+    name,
+    number,
+    car,
+    price,
+    model,
+    owner,
+    fuel,
+    kilometers,
+    original,
+    tyre,
+    interior,
+    engine,
+    images
+  }`);
+
   return (
     <>
-      <HomePage />
+      <HomeSatiny initialCars={cars} />
     </>
   );
 }

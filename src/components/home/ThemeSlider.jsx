@@ -9,18 +9,37 @@ import { EffectFade, FreeMode, Navigation, Thumbs } from "swiper/modules";
 import { Swiper, SwiperSlide } from "swiper/react";
 // import LIGHTBOX
 import { SlideshowLightbox } from "lightbox.js-react";
+import { urlFor } from "@/utils/sanity";
 const ThemeSlider = ({ imageData }) => {
   const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImages, setSelectedImages] = useState([]);
   const handleImageClick = (images) => {
     setSelectedImages(
-      images.map((img) => ({
-        src: `https://radiant-fellowship-7fbb005f57.media.strapiapp.com/${img.url}`,
-      }))
+      images
+        .filter((obj) => obj && obj._type === "image") // Filter out invalid objects
+        .map((obj) => ({
+          src: urlFor(obj).width(800).url(),
+        }))
     );
     setIsOpen(true);
   };
+
+  console.log(imageData, "imageDataimageData");
+
+  // Filter valid images
+  const validImages =
+    imageData?.filter((obj) => obj && obj._type === "image") || [];
+
+  // If no valid images, show placeholder
+  if (validImages.length === 0) {
+    return (
+      <div className="bg-gray-100 rounded-lg h-[270px] sm:h-[400px] md:h-[500px] lg:h-[428px] xl:h-[450px] border border-black border-opacity-10 flex items-center justify-center">
+        <p className="text-gray-500">No images available</p>
+      </div>
+    );
+  }
+
   return (
     <>
       <Swiper
@@ -35,17 +54,17 @@ const ThemeSlider = ({ imageData }) => {
         modules={[FreeMode, EffectFade, Navigation, Thumbs]}
         className="mySwiper2"
       >
-        {imageData?.map((obj, index) => {
+        {validImages.map((obj, index) => {
           return (
             <SwiperSlide key={index}>
               <div className="bg-white rounded-lg overflow-hidden relative h-[270px] sm:h-[400px] md:h-[500px] lg:h-[428px] xl:h-[450px] border border-black border-opacity-10 flex items-center justify-center cursor-pointer">
                 <img
-                  src={`https://radiant-fellowship-7fbb005f57.media.strapiapp.com/${obj.url}`}
+                  src={urlFor(obj).width(800).url()}
                   alt="theme"
                   className="w-full"
                   width={500}
                   height={500}
-                  onClick={() => handleImageClick(imageData)}
+                  onClick={() => handleImageClick(validImages)}
                 />
               </div>
             </SwiperSlide>
@@ -61,12 +80,12 @@ const ThemeSlider = ({ imageData }) => {
         modules={[FreeMode, Navigation, Thumbs]}
         className="mySwiper mt-2"
       >
-        {imageData?.map((obj, index) => {
+        {validImages.map((obj, index) => {
           return (
             <SwiperSlide key={index}>
               <div className="bg-white rounded-md overflow-hidden border border-black border-opacity-10 flex items-center justify-center cursor-pointer h-[42px] sm:h-[70px] md:h-[93px] lg:h-[60px] xl:h-[90px]">
                 <img
-                  src={`https://radiant-fellowship-7fbb005f57.media.strapiapp.com/${obj.url}`}
+                  src={urlFor(obj).width(800).url()}
                   alt="theme"
                   className="w-full"
                   width={90}

@@ -2,21 +2,33 @@
 import Image from "next/image";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { urlFor } from "@/utils/sanity";
 import Cta from "../common/Cta";
 import Icons from "../common/Icons";
 import NotFoundData from "../common/NotFoundData";
 
-const CardsData = ({ showData }) => {
+const CardsData = ({ initialCars }) => {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [visibleCount, setVisibleCount] = useState(12);
   const [loading, setLoading] = useState(false);
+  const [shuffledCars, setShuffledCars] = useState([]);
+  const [isMounted, setIsMounted] = useState(false);
   const serviceValue = searchParams.get("service")?.toLowerCase() || ""; // Get service from query
   const [searchTerm, setSearchTerm] = useState(serviceValue);
   useEffect(() => {
     setSearchTerm(serviceValue);
   }, [serviceValue]);
+
+  useEffect(() => {
+    setIsMounted(true);
+    // Shuffle cars only on client side after mount
+    if (initialCars) {
+      const shuffled = [...initialCars].sort(() => Math.random() - 0.5);
+      setShuffledCars(shuffled);
+    }
+  }, [initialCars]);
 
   const handleInputChange = (e) => {
     const newValue = e.target.value;
@@ -35,7 +47,10 @@ const CardsData = ({ showData }) => {
     router.push(`${pathname}?${params.toString()}`, { scroll: false });
   };
 
-  const filteredCards = showData?.data?.filter((obj) => {
+  // Use original order for server-side rendering, shuffled for client
+  const carsToFilter = isMounted ? shuffledCars : initialCars || [];
+
+  const filteredCards = carsToFilter.filter((obj) => {
     const matchesSearch = Object.values(obj).some(
       (value) =>
         value != null &&
@@ -81,72 +96,68 @@ const CardsData = ({ showData }) => {
       {filteredCards?.length > 0 ? (
         <>
           <div className="grid gap-4 lg:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-8">
-            {[...filteredCards]
-              .sort(() => Math.random() - 0.5)
-              .slice(0, visibleCount)
-              .map((obj, index) => (
-                <div
-                  className="border rounded-lg overflow-hidden hover:shadow-lg transition-all ease-in-out duration-300 max-sm:max-w-[380px] max-sm:w-full max-sm:mx-auto"
-                  key={index}
-                >
-                  <div className="h-[220px] lg:h-[210px] xl:h-[250px] flex items-center border-b overflow-hidden">
-                    <img
-                      src={
-                        obj?.images?.[0]?.url
-                          ? `https://radiant-fellowship-7fbb005f57.media.strapiapp.com/${obj.images[0].url}`
-                          : "/assets/images/webp/alto.webp"
-                      }
-                      alt="scorpio"
-                      width={300}
-                      height={300}
-                      className="w-full object-cover pointer-events-none"
-                    />
-                  </div>
-                  <div className="p-3 sm:p-4">
-                    <h2 className="pb-2 font-bold text-xl sm:text-2xl line-clamp-1">
-                      {obj.car}
-                    </h2>
-                    <div className="flex justify-between pb-1">
-                      <p className="text-base sm:text-lg">₹ {obj.price}</p>
-                      <p className="text-base sm:text-lg">Model: {obj.model}</p>
-                    </div>
-                    <div className="flex justify-between pb-3">
-                      <p className="text-base sm:text-lg">Fuel: {obj.fuel}</p>
-                      <span
-                        className="size-6 cursor-pointer"
-                        onClick={() => {
-                          if (navigator.share) {
-                            navigator
-                              .share({
-                                title: "Check this out!",
-                                text: "Here is the document ID you might need:",
-                                url:
-                                  window.location.origin + "/" + obj.documentId, // Adjust URL structure as needed
-                              })
-                              .catch((error) =>
-                                console.error("Error sharing:", error)
-                              );
-                          } else {
-                            navigator.clipboard.writeText(
-                              window.location.origin + "/" + obj.documentId
-                            );
-                            alert("Link copied to clipboard!");
-                          }
-                        }}
-                      >
-                        <Image
-                          src="/assets/images/svg/share-icon.svg"
-                          alt="share"
-                          width={24}
-                          height={24}
-                          className="w-full pointer-events-none"
-                        />
-                      </span>
-                    </div>
-                    <Cta url={`/${obj.documentId}`}>View Complete Details</Cta>
-                  </div>
+            {filteredCards.slice(0, visibleCount).map((obj, index) => (
+              <div
+                className="border rounded-lg overflow-hidden hover:shadow-lg transition-all ease-in-out duration-300 max-sm:max-w-[380px] max-sm:w-full max-sm:mx-auto"
+                key={index}
+              >
+                <div className="h-[220px] lg:h-[210px] xl:h-[250px] flex items-center border-b overflow-hidden">
+                  <img
+                    src={
+                      obj?.images?.[0]?.asset
+                        ? urlFor(obj.images[0]).width(400).height(300).url()
+                        : "/assets/images/webp/alto.webp"
+                    }
+                    alt={obj.car || "car"}
+                    width={300}
+                    height={300}
+                    className="w-full object-cover pointer-events-none"
+                  />
                 </div>
-              ))}
+                <div className="p-3 sm:p-4">
+                  <h2 className="pb-2 font-bold text-xl sm:text-2xl line-clamp-1">
+                    {obj.car}
+                  </h2>
+                  <div className="flex justify-between pb-1">
+                    <p className="text-base sm:text-lg">₹ {obj.price}</p>
+                    <p className="text-base sm:text-lg">Model: {obj.model}</p>
+                  </div>
+                  <div className="flex justify-between pb-3">
+                    <p className="text-base sm:text-lg">Fuel: {obj.fuel}</p>
+                    <span
+                      className="size-6 cursor-pointer"
+                      onClick={() => {
+                        if (navigator.share) {
+                          navigator
+                            .share({
+                              title: "Check this out!",
+                              text: "Here is the document ID you might need:",
+                              url: window.location.origin + "/" + obj._id, // Use Sanity _id
+                            })
+                            .catch((error) =>
+                              console.error("Error sharing:", error)
+                            );
+                        } else {
+                          navigator.clipboard.writeText(
+                            window.location.origin + "/" + obj._id
+                          );
+                          alert("Link copied to clipboard!");
+                        }
+                      }}
+                    >
+                      <Image
+                        src="/assets/images/svg/share-icon.svg"
+                        alt="share"
+                        width={24}
+                        height={24}
+                        className="w-full pointer-events-none"
+                      />
+                    </span>
+                  </div>
+                  <Cta url={`/${obj._id}`}>View Complete Details</Cta>
+                </div>
+              </div>
+            ))}
           </div>
           {visibleCount < filteredCards.length && (
             <div className="flex justify-center">
