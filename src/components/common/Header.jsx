@@ -4,6 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Cta from "./Cta";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignUpButton,
+  UserButton,
+} from "@clerk/nextjs";
 const Header = () => {
   const pathname = usePathname();
 
@@ -38,9 +45,8 @@ const Header = () => {
               <li key={index}>
                 <Link
                   href={obj.url}
-                  className={`text-white font-medium transition-all text-sm sm:text-base duration-300 text-nowrap ${
-                    isActive ? "!text-[#ff5e00]" : "hover:text-[#ff5e00]"
-                  }`}
+                  className={`text-white font-medium transition-all text-sm sm:text-base duration-300 text-nowrap ${isActive ? "!text-[#ff5e00]" : "hover:text-[#ff5e00]"
+                    }`}
                 >
                   {obj.link}
                 </Link>
@@ -48,12 +54,34 @@ const Header = () => {
             );
           })}
         </ul>
-        <Cta
-          onClick={handleWhatsAppClick}
-          className="bg-transparent !w-auto !text-[#ff5e00] py-2 px-6 hover:!bg-[#ff5e00] hover:!text-white"
-        >
-          Call Whatsapp
-        </Cta>
+        <div className="flex gap-4">
+          {/* <Cta
+            onClick={handleWhatsAppClick}
+            className="bg-transparent !w-auto !text-[#ff5e00] py-2 px-6 hover:!bg-[#ff5e00] hover:!text-white"
+          >
+            Call Whatsapp
+          </Cta> */}
+          <Cta url="/sign-up"
+            className="bg-transparent !w-auto !text-[#ff5e00] py-2 px-6 hover:!bg-[#ff5e00] hover:!text-white"
+          >
+            sign-up
+          </Cta>
+          <Cta
+            url="/sign-in"
+            className="bg-transparent !w-auto !text-[#ff5e00] py-2 px-6 hover:!bg-[#ff5e00] hover:!text-white"
+          >
+            sign-in
+          </Cta>
+          {/* <SignedOut>
+            <SignInButton className="whitespace-nowrap border border-[#ff5e00] text-sm rounded-lg py-2 px-3 font-semibold transition-all ease-in-out duration-300 bg-transparent text-[#ff5e00] hover:bg-[#ff5e00] hover:text-white" />
+            <SignUpButton className="border border-[#ff5e00] text-sm rounded-lg py-2 px-3 text-white font-semibold bg-[#ff5e00] hover:text-[#ff5e00] hover:bg-white transition-all ease-in-out duration-300">
+              Sign Up
+            </SignUpButton>
+          </SignedOut> */}
+          <SignedIn>
+            <UserButton />
+          </SignedIn>
+        </div>
       </div>
     </div>
   );

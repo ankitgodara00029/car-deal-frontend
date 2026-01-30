@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.34.4",
     "@sanity/image-url": "^1.2.0",
     "lightbox.js-react": "^1.4.9",
     "next": "15.1.4",
