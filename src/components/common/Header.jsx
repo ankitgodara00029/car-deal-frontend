@@ -1,27 +1,18 @@
 "use client";
-import { NAV_LIST } from "@/utils/helper";
+import { NAV_LIST, NAV_LIST_SIGNED_IN } from "@/utils/helper";
+import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
+import CustomUserButton from "./CustomUserButton";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Cta from "./Cta";
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignUpButton,
-  UserButton,
-} from "@clerk/nextjs";
+
 const Header = () => {
   const pathname = usePathname();
+  const { isSignedIn } = useUser();
 
-  const phoneNumber = "+919588546573";
-  const message = "Hello, I would like to know more about your services!";
-  const handleWhatsAppClick = () => {
-    const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(
-      message
-    )}`;
-    window.open(url, "_blank");
-  };
+  // Use different navigation based on sign-in status
+  const navigationList = isSignedIn ? NAV_LIST_SIGNED_IN : NAV_LIST;
 
   return (
     <div className="bg-[#1f2937] py-3 md:py-4 md:sticky top-0 z-10">
@@ -38,15 +29,16 @@ const Header = () => {
         <ul
           className={`flex gap-3 sm:gap-6 items-center max-md:justify-between max-md:pe-5 max-md:fixed max-md:bottom-0 z-30 max-md:w-full start-0 max-md:bg-[#1f2937] max-md:items-start max-md:ps-6 max-md:py-3 transition-all duration-300`}
         >
-          {NAV_LIST.map((obj, index) => {
+          {navigationList.map((obj, index) => {
             const basePath = obj.url.split("?")[0];
             const isActive = pathname === basePath;
             return (
               <li key={index}>
                 <Link
                   href={obj.url}
-                  className={`text-white font-medium transition-all text-sm sm:text-base duration-300 text-nowrap ${isActive ? "!text-[#ff5e00]" : "hover:text-[#ff5e00]"
-                    }`}
+                  className={`text-white font-medium transition-all text-sm sm:text-base duration-300 text-nowrap ${
+                    isActive ? "!text-[#ff5e00]" : "hover:text-[#ff5e00]"
+                  }`}
                 >
                   {obj.link}
                 </Link>
@@ -55,31 +47,22 @@ const Header = () => {
           })}
         </ul>
         <div className="flex gap-4">
-          {/* <Cta
-            onClick={handleWhatsAppClick}
-            className="bg-transparent !w-auto !text-[#ff5e00] py-2 px-6 hover:!bg-[#ff5e00] hover:!text-white"
-          >
-            Call Whatsapp
-          </Cta> */}
-          <Cta url="/sign-up"
-            className="bg-transparent !w-auto !text-[#ff5e00] py-2 px-6 hover:!bg-[#ff5e00] hover:!text-white"
-          >
-            sign-up
-          </Cta>
-          <Cta
-            url="/sign-in"
-            className="bg-transparent !w-auto !text-[#ff5e00] py-2 px-6 hover:!bg-[#ff5e00] hover:!text-white"
-          >
-            sign-in
-          </Cta>
-          {/* <SignedOut>
-            <SignInButton className="whitespace-nowrap border border-[#ff5e00] text-sm rounded-lg py-2 px-3 font-semibold transition-all ease-in-out duration-300 bg-transparent text-[#ff5e00] hover:bg-[#ff5e00] hover:text-white" />
-            <SignUpButton className="border border-[#ff5e00] text-sm rounded-lg py-2 px-3 text-white font-semibold bg-[#ff5e00] hover:text-[#ff5e00] hover:bg-white transition-all ease-in-out duration-300">
-              Sign Up
-            </SignUpButton>
-          </SignedOut> */}
+          <SignedOut>
+            <Cta
+              url="/sign-up"
+              className="bg-transparent !w-auto !text-[#ff5e00] !py-2 px-3 sm:px-6 hover:!bg-[#ff5e00] hover:!text-white"
+            >
+              sign-up
+            </Cta>
+            <Cta
+              url="/sign-in"
+              className="bg-transparent !w-auto !text-[#ff5e00] !py-2 px-3 sm:px-6 hover:!bg-[#ff5e00] hover:!text-white"
+            >
+              sign-in
+            </Cta>
+          </SignedOut>
           <SignedIn>
-            <UserButton />
+            <CustomUserButton />
           </SignedIn>
         </div>
       </div>

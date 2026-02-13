@@ -1,3 +1,5 @@
+"use client";
+import { SignedIn } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import Icons from "./Icons";
@@ -60,16 +62,18 @@ const Footer = () => {
                 Our Services
               </Link>
             </li>
-            <li>
-              <Link
-                rel="noopener noreferrer"
-                aria-label="links"
-                href="/post-your-car"
-                className="text-white opacity-70 hover:opacity-100 transition-all ease-in-out duration-300"
-              >
-                Post Your Car
-              </Link>
-            </li>
+            <SignedIn>
+              <li>
+                <Link
+                  rel="noopener noreferrer"
+                  aria-label="links"
+                  href="/post-your-car"
+                  className="text-white opacity-70 hover:opacity-100 transition-all ease-in-out duration-300"
+                >
+                  Post Your Car
+                </Link>
+              </li>
+            </SignedIn>
           </ul>
         </div>
         <div className="4/12 lg:w-2/12 text-white">

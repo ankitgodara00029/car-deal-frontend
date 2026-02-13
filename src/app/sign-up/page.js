@@ -59,7 +59,7 @@ export default function CustomSignUp() {
       });
 
       await signUp.setActive();
-      router.push("/dashboard"); // success redirect
+      window.location.href = "/"; // redirect to home page after successful signup with reload
     } catch (err) {
       setError("Invalid OTP");
     }
@@ -70,7 +70,7 @@ export default function CustomSignUp() {
     await signUp.authenticateWithRedirect({
       strategy: "oauth_google",
       redirectUrl: "/sign-up",
-      redirectUrlComplete: "/dashboard",
+      redirectUrlComplete: "/", // redirect to home page after Google signup with reload
     });
   };
 
@@ -162,6 +162,17 @@ export default function CustomSignUp() {
             <button onClick={signUpWithGoogle} className="btn-google">
               Continue with Google
             </button>
+
+            <p className="text-sm text-gray-600 text-center mt-4">
+              Already have an account?{" "}
+              <button
+                type="button"
+                onClick={() => router.push("/sign-in")}
+                className="text-blue-500 hover:underline"
+              >
+                Sign in
+              </button>
+            </p>
           </>
         )}
 

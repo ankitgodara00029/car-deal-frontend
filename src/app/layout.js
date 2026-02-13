@@ -4,6 +4,8 @@ import Header from "@/components/common/Header";
 import Preloader from "@/components/common/Preloader";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 export const metadata = {
   metadataBase: "https://www.car-deal.shop/",
   title: "Your Trusted Marketplace for Cars!",
@@ -27,6 +29,17 @@ export default function RootLayout({ children }) {
           <Footer />
           <BackToTop />
           <Preloader />
+          <ToastContainer
+            position="top-right"
+            autoClose={3000}
+            hideProgressBar={false}
+            newestOnTop={false}
+            closeOnClick
+            rtl={false}
+            pauseOnFocusLoss
+            draggable
+            pauseOnHover
+          />
         </body>
       </html>
     </ClerkProvider>

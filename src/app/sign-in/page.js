@@ -56,7 +56,7 @@ export default function CustomSignIn() {
         password,
       });
 
-      router.push("/dashboard"); // after login
+      window.location.href = "/"; // redirect to home page after login with reload
     } catch (err) {
       setError(err.errors[0]?.message || "Login failed");
     }
@@ -77,7 +77,7 @@ export default function CustomSignIn() {
       });
 
       setResetMessage(
-        "Password reset code sent! Check your email and enter the code below."
+        "Password reset code sent! Check your email and enter the code below.",
       );
       setError("");
       setShowForgotPassword(false);
@@ -119,7 +119,7 @@ export default function CustomSignIn() {
 
       if (result.status === "complete") {
         setResetMessage(
-          "Password reset successful! You can now sign in with your new password."
+          "Password reset successful! You can now sign in with your new password.",
         );
         setShowCodeVerification(false);
         setShowForgotPassword(false);
@@ -134,7 +134,7 @@ export default function CustomSignIn() {
       }
     } catch (err) {
       setError(
-        err.errors[0]?.message || "Invalid code or failed to reset password"
+        err.errors[0]?.message || "Invalid code or failed to reset password",
       );
     }
   };
@@ -241,7 +241,7 @@ export default function CustomSignIn() {
 
         {/* Navigation buttons */}
         {!showForgotPassword && !showCodeVerification ? (
-          <div className="text-center">
+          <div className="text-center space-y-2">
             <button
               type="button"
               onClick={() => {
@@ -249,10 +249,20 @@ export default function CustomSignIn() {
                 setError("");
                 setResetMessage("");
               }}
-              className="text-blue-500 hover:underline text-sm"
+              className="text-blue-500 hover:underline text-sm block w-full"
             >
               Forgot your password?
             </button>
+            <p className="text-sm text-gray-600">
+              Don&apos;t have an account?{" "}
+              <button
+                type="button"
+                onClick={() => router.push("/sign-up")}
+                className="text-blue-500 hover:underline"
+              >
+                Sign up
+              </button>
+            </p>
           </div>
         ) : showForgotPassword ? (
           <div className="text-center">

@@ -3,7 +3,15 @@ export const NAV_LIST = [
   { url: "/", link: "Home" },
   { url: "/about-us", link: "About Us" },
   { url: "/our-services", link: "Our Services" },
+];
+
+// NAVBAR LINKS FOR SIGNED IN USERS
+export const NAV_LIST_SIGNED_IN = [
+  { url: "/", link: "Home" },
+  { url: "/about-us", link: "About Us" },
+  { url: "/our-services", link: "Our Services" },
   { url: "/post-your-car", link: "Post Your Car" },
+  { url: "/dashboard", link: "Dashboard" },
 ];
 // FAQ LIST
 export const FAQ_LIST = [
