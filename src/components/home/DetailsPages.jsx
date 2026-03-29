@@ -43,7 +43,8 @@ const DetailsPages = () => {
             images,
             _createdAt
           }`,
-          { id }
+          { id },
+          { cache: "no-store" },
         );
 
         if (carData) {
@@ -67,7 +68,8 @@ const DetailsPages = () => {
               engine,
               images
             }`,
-            { carName: carData.car, id }
+            { carName: carData.car, id },
+            { cache: "no-store" },
           );
 
           setSimilarCars(similarCarsData);
@@ -207,11 +209,11 @@ const DetailsPages = () => {
                           url: window.location.origin + "/" + car?.documentId,
                         })
                         .catch((error) =>
-                          console.error("Error sharing:", error)
+                          console.error("Error sharing:", error),
                         );
                     } else {
                       navigator.clipboard.writeText(
-                        window.location.origin + "/" + car?.documentId
+                        window.location.origin + "/" + car?.documentId,
                       );
                       alert("Link copied to clipboard!");
                     }
@@ -232,46 +234,46 @@ const DetailsPages = () => {
             </div>
           </div>
         </div>
-            <div className="bg-white w-full py-3 px-3 font-semibold text-sm shadow flex items-center mt-12 sm:mt-16">
-              <h3 className="text-lg md:font-semibold text-gray-800 leading-tight">
-                Latest Cars {car?.car}
-              </h3>
-            </div>
-            <div className="grid gap-4 lg:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-6">
-              {similarCars.slice(0, visibleCount).map((obj, index) => (
-                <div
-                  className="border rounded-lg overflow-hidden hover:shadow-lg transition-all ease-in-out duration-300 max-sm:max-w-[380px] max-sm:w-full max-sm:mx-auto"
-                  key={index}
-                >
-                  <div className="h-[220px] lg:h-[210px] xl:h-[250px] flex items-center border-b overflow-hidden">
-                    <img
-                      src={
-                        obj?.images?.[0]?.asset
-                          ? urlFor(obj.images[0]).width(400).height(300).url()
-                          : "/assets/images/webp/alto.webp"
-                      }
-                      alt={obj.car || "car"}
-                      width={300}
-                      height={300}
-                      className="w-full object-cover pointer-events-none"
-                    />
-                  </div>
-                  <div className="p-3 sm:p-4">
-                    <h2 className="pb-2 font-bold text-xl sm:text-2xl line-clamp-1">
-                      {obj.car}
-                    </h2>
-                    <div className="flex justify-between pb-1">
-                      <p className="text-base sm:text-lg">₹ {obj.price}</p>
-                      <p className="text-base sm:text-lg">Model: {obj.model}</p>
-                    </div>
-                    <div className="flex justify-between pb-3">
-                      <p className="text-base sm:text-lg">Fuel: {obj.fuel}</p>
-                    </div>
-                    <Cta url={`/${obj._id}`}>View Complete Details</Cta>
-                  </div>
+        <div className="bg-white w-full py-3 px-3 font-semibold text-sm shadow flex items-center mt-12 sm:mt-16">
+          <h3 className="text-lg md:font-semibold text-gray-800 leading-tight">
+            Latest Cars {car?.car}
+          </h3>
+        </div>
+        <div className="grid gap-4 lg:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 mt-6">
+          {similarCars.slice(0, visibleCount).map((obj, index) => (
+            <div
+              className="border rounded-lg overflow-hidden hover:shadow-lg transition-all ease-in-out duration-300 max-sm:max-w-[380px] max-sm:w-full max-sm:mx-auto"
+              key={index}
+            >
+              <div className="h-[220px] lg:h-[210px] xl:h-[250px] flex items-center border-b overflow-hidden">
+                <img
+                  src={
+                    obj?.images?.[0]?.asset
+                      ? urlFor(obj.images[0]).width(400).height(300).url()
+                      : "/assets/images/webp/alto.webp"
+                  }
+                  alt={obj.car || "car"}
+                  width={300}
+                  height={300}
+                  className="w-full object-cover pointer-events-none"
+                />
+              </div>
+              <div className="p-3 sm:p-4">
+                <h2 className="pb-2 font-bold text-xl sm:text-2xl line-clamp-1">
+                  {obj.car}
+                </h2>
+                <div className="flex justify-between pb-1">
+                  <p className="text-base sm:text-lg">₹ {obj.price}</p>
+                  <p className="text-base sm:text-lg">Model: {obj.model}</p>
                 </div>
-              ))}
+                <div className="flex justify-between pb-3">
+                  <p className="text-base sm:text-lg">Fuel: {obj.fuel}</p>
+                </div>
+                <Cta url={`/${obj._id}`}>View Complete Details</Cta>
+              </div>
             </div>
+          ))}
+        </div>
         {visibleCount < similarCars.length && (
           <div className="flex justify-center">
             {loading ? (

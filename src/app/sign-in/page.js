@@ -118,19 +118,7 @@ export default function CustomSignIn() {
       });
 
       if (result.status === "complete") {
-        setResetMessage(
-          "Password reset successful! You can now sign in with your new password.",
-        );
-        setShowCodeVerification(false);
-        setShowForgotPassword(false);
-        setError("");
-        // Clear all form fields
-        setVerificationCode("");
-        setOtp(["", "", "", "", "", ""]);
-        setNewPassword("");
-        setConfirmPassword("");
-        setEmail("");
-        setPassword("");
+        window.location.href = "/";
       }
     } catch (err) {
       setError(

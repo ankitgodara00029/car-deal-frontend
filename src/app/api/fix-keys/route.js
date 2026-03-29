@@ -1,5 +1,5 @@
-import { client, generateUniqueKey } from "@/utils/sanity";
-
+import { writeClient as client, generateUniqueKey } from "@/utils/sanity";
+export const dynamic = "force-dynamic";
 export async function POST() {
   try {
     console.log("Starting to fix missing keys...");
@@ -45,7 +45,7 @@ export async function POST() {
         success: false,
         error: error.message,
       },
-      { status: 500 }
+      { status: 500 },
     );
   }
 }

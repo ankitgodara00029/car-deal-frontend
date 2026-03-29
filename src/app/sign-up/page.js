@@ -1,11 +1,12 @@
 "use client";
 
-import { useSignUp } from "@clerk/nextjs";
+import { useSignUp, useClerk } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
 export default function CustomSignUp() {
   const { signUp, isLoaded } = useSignUp();
+  const { setActive } = useClerk();
   const router = useRouter();
 
   const [step, setStep] = useState("form");
@@ -51,17 +52,18 @@ export default function CustomSignUp() {
 
   // ---------------- VERIFY OTP ----------------
   const verifyOtp = async () => {
+    setError("");
     try {
       const code = otp.join("");
-
-      await signUp.attemptEmailAddressVerification({
-        code,
-      });
-
-      await signUp.setActive();
-      window.location.href = "/"; // redirect to home page after successful signup with reload
+      const result = await signUp.attemptEmailAddressVerification({ code });
+      if (result.status === "complete") {
+        await setActive({ session: result.createdSessionId });
+        window.location.href = "/";
+      } else {
+        setError("Verification incomplete. Please try again.");
+      }
     } catch (err) {
-      setError("Invalid OTP");
+      setError(err.errors?.[0]?.message || "Invalid OTP");
     }
   };
 

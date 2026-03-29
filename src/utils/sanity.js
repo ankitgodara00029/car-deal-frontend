@@ -2,13 +2,22 @@
 import { createClient } from "@sanity/client";
 import imageUrlBuilder from "@sanity/image-url";
 
-// 👇 Read-only client (safe to expose to frontend)
+// Read-only client — safe for frontend use
 export const client = createClient({
   projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
   dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
-  apiVersion: "2023-05-03", // Use a stable API version
+  apiVersion: "2023-05-03",
   useCdn: false,
-  token: process.env.NEXT_PUBLIC_SANITY_WRITE_TOKEN, // 🔥 must add in .env.local
+  perspective: "published",
+});
+
+// Write client — server-side only (never import in "use client" files)
+export const writeClient = createClient({
+  projectId: process.env.NEXT_PUBLIC_SANITY_PROJECT_ID,
+  dataset: process.env.NEXT_PUBLIC_SANITY_DATASET,
+  apiVersion: "2023-05-03",
+  useCdn: false,
+  token: process.env.SANITY_WRITE_TOKEN,
 });
 
 const builder = imageUrlBuilder(client);

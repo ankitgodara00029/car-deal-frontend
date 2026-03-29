@@ -1,3 +1,4 @@
+export const dynamic = "force-dynamic";
 import ContactUs from "@/components/common/ContactUs";
 import Faq from "@/components/common/Faq";
 import CarManager from "@/components/home/CarManager";
