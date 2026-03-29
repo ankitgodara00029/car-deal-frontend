@@ -90,7 +90,7 @@ const CustomUserButton = () => {
 
           {/* Menu Items */}
           <div className="py-1">
-            <button
+            {/* <button
               onClick={() => {
                 setIsOpen(false);
                 router.push("/dashboard");
@@ -111,7 +111,7 @@ const CustomUserButton = () => {
                 />
               </svg>
               Dashboard
-            </button>
+            </button> */}
 
             <button
               onClick={() => {

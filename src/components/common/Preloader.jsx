@@ -18,7 +18,7 @@ const Preloader = () => {
     <>
       {isPreloaderVisible && (
         <div
-          className={`w-full min-h-screen flex items-center justify-center fixed start-0 top-0 z-[999] bg-[#1f2937]`}
+          className={`w-full min-h-[100dvh] flex items-center justify-center fixed start-0 top-0 z-[999] bg-[#1f2937]`}
         >
           <p className="text-white text-[32px] sm:text-5xl font-bold preloader"></p>
         </div>

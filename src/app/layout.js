@@ -6,16 +6,56 @@ import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+
 export const metadata = {
-  metadataBase: "https://www.car-deal.shop/",
+  metadataBase: new URL("https://www.car-deal.shop"),
+
   title: "Your Trusted Marketplace for Cars!",
   description:
     "Find the perfect car or sell yours at the best price—all in one place.",
+
+  // ✅ Google Search Console verification
+  verification: {
+    google: "KXbx0S_KtpHEM7ewZFOcHLgrzQIvnfu2yhFka518alM",
+  },
+
+  // ✅ Open Graph (Facebook, LinkedIn sharing)
   openGraph: {
     title: "Your Trusted Marketplace for Cars!",
     description:
       "Find the perfect car or sell yours at the best price—all in one place.",
+    url: "https://www.car-deal.shop",
+    siteName: "Car Deal",
+    images: [
+      {
+        url: "/meta-image-home.webp",
+        width: 1200,
+        height: 630,
+        alt: "Car Deal Marketplace",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+
+  // ✅ Twitter SEO
+  twitter: {
+    card: "summary_large_image",
+    title: "Your Trusted Marketplace for Cars!",
+    description:
+      "Find the perfect car or sell yours at the best price—all in one place.",
     images: ["/meta-image-home.webp"],
+  },
+
+  // ✅ Robots (SEO indexing)
+  robots: {
+    index: true,
+    follow: true,
+  },
+
+  // ✅ Icons / favicon
+  icons: {
+    icon: "/favicon.ico",
   },
 };
 

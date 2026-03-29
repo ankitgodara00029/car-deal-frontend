@@ -3,6 +3,7 @@
 import { useSignIn } from "@clerk/nextjs";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import CommonInput from "@/components/common/CommonInput";
 
 export default function CustomSignIn() {
   const { signIn, isLoaded } = useSignIn();
@@ -128,7 +129,7 @@ export default function CustomSignIn() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center">
+    <div className="min-h-[calc(100vh-150px)] flex items-center justify-center">
       <form
         onSubmit={
           showCodeVerification
@@ -137,7 +138,7 @@ export default function CustomSignIn() {
               ? handleForgotPassword
               : handleSubmit
         }
-        className="w-96 p-6 border rounded"
+        className="w-full space-y-4 mx-auto border shadow-md bg-white max-w-[440px] px-5 py-6 rounded-lg"
       >
         <h2 className="text-2xl mb-4">
           {showCodeVerification
@@ -152,10 +153,9 @@ export default function CustomSignIn() {
 
         {/* Email field - shown in all states except code verification */}
         {!showCodeVerification && (
-          <input
+          <CommonInput
             type="email"
             placeholder="Email"
-            className="w-full mb-3 p-2 border"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             required
@@ -164,10 +164,9 @@ export default function CustomSignIn() {
 
         {/* Password field - only shown in normal sign in */}
         {!showForgotPassword && !showCodeVerification && (
-          <input
+          <CommonInput
             type="password"
             placeholder="Password"
-            className="w-full mb-3 p-2 border"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             required
@@ -199,19 +198,17 @@ export default function CustomSignIn() {
               ))}
             </div>
 
-            <input
+            <CommonInput
               type="password"
               placeholder="New Password (min 8 characters)"
-              className="w-full mb-3 p-2 border"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
               required
             />
 
-            <input
+            <CommonInput
               type="password"
               placeholder="Confirm New Password"
-              className="w-full mb-3 p-2 border"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
