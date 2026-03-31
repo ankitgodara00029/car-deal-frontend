@@ -20,33 +20,28 @@ const Dashboard = () => {
 
   // Fetch user's posted cars
   const fetchUserCars = async () => {
-    if (!user?.emailAddresses?.[0]?.emailAddress) return;
+    if (!user?.id) return;
 
     try {
       setLoading(true);
-      const query = `*[_type == "car" && userEmail == $userEmail] | order(_createdAt desc) {
-        _id,
-        _createdAt,
-        carName,
-        carModel,
-        carYear,
-        carPrice,
-        carMileage,
-        carFuelType,
-        carTransmission,
-        carColor,
-        carDescription,
-        userEmail,
-        userName,
-        userPhone,
-        images,
-        isActive
-      }`;
+      const query = `*[_type == "car" && userId == $userId] | order(_createdAt desc) {
+  _id,
+  _createdAt,
+  car,
+  model,
+  price,
+  kilometers,
+  fuel, 
+  name,
+  number,
+  images,
+  userId
+}`;
 
       const cars = await client.fetch(query, {
-        userEmail: user.emailAddresses[0].emailAddress,
+        userId: user.id,
       });
-
+      console.log(cars, "carscars");
       setUserCars(cars);
     } catch (error) {
       console.error("Error fetching user cars:", error);
@@ -341,7 +336,7 @@ const Dashboard = () => {
                           {car.images && car.images.length > 0 ? (
                             <Image
                               src={urlFor(car.images[0]).url()}
-                              alt={car.carName}
+                              alt={car.car}
                               fill
                               className="object-cover"
                             />
@@ -366,13 +361,13 @@ const Dashboard = () => {
                         {/* Car Details */}
                         <div className="p-4">
                           <h3 className="font-semibold text-lg text-gray-900 mb-2">
-                            {car.carName} {car.carModel}
+                            {car.car} {car.model}
                           </h3>
                           <div className="space-y-1 text-sm text-gray-600 mb-4">
-                            <p>Year: {car.carYear}</p>
-                            <p>Price: ₹{car.carPrice?.toLocaleString()}</p>
-                            <p>Mileage: {car.carMileage} km/l</p>
-                            <p>Fuel: {car.carFuelType}</p>
+                            <p>Year: {car.model}</p>
+                            <p>Price: ₹{car.price?.toLocaleString()}</p>
+                            <p>Mileage: {car.kilometers} km/l</p>
+                            <p>Fuel: {car.fuel}</p>
                           </div>
 
                           <div className="flex space-x-2">
@@ -500,33 +495,13 @@ const Dashboard = () => {
       </div>
 
       {/* Delete Confirmation Popup */}
-      {/* <CustomPopup isOpen={deletePopup} onClose={() => setDeletePopup(false)}>
-        <div className="p-6">
-          <h3 className="text-lg font-semibold text-gray-900 mb-4">
-            Delete Car Listing
-          </h3>
-          <p className="text-gray-600 mb-6">
-            Are you sure you want to delete "{selectedCar?.carName}{" "}
-            {selectedCar?.carModel}"? This action cannot be undone.
-          </p>
-          <div className="flex space-x-4">
-            <button
-              onClick={() => setDeletePopup(false)}
-              className="flex-1 bg-gray-300 text-gray-700 py-2 px-4 rounded-md hover:bg-gray-400 transition-colors"
-              disabled={deleting}
-            >
-              Cancel
-            </button>
-            <button
-              onClick={deleteCar}
-              className="flex-1 bg-red-600 text-white py-2 px-4 rounded-md hover:bg-red-700 transition-colors disabled:opacity-50"
-              disabled={deleting}
-            >
-              {deleting ? "Deleting..." : "Delete"}
-            </button>
-          </div>
-        </div>
-      </CustomPopup> */}
+      {deletePopup && (
+        <CustomPopup
+          handleConfirm={deleteCar}
+          setShowPopup={setDeletePopup}
+          message={`Are you sure you want to delete "${selectedCar?.car} ${selectedCar?.model}"? This action cannot be undone.`}
+        />
+      )}
     </div>
   );
 };

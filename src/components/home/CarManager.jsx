@@ -1,18 +1,19 @@
 "use client";
 import { useState } from "react";
 import CarForm from "./CarForm";
+import { useUser } from "@clerk/nextjs";
 
 export default function CarManager({ initialCars }) {
+  const { user } = useUser();
   const [cars, setCars] = useState(initialCars);
   const [isSubmitting, setIsSubmitting] = useState(false);
-
   const handleCarSubmit = async (carData) => {
     setIsSubmitting(true);
     try {
       const formData = new FormData();
 
       // Separate image files from the rest of carData
-      const { images, ...rest } = carData;
+      const { images, ...rest } = { ...carData, userId: user.id };
       formData.append("carData", JSON.stringify(rest));
 
       if (images && images.length > 0) {
