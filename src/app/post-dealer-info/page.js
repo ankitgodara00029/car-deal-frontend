@@ -34,7 +34,7 @@ const PostDealerInfo = () => {
           {},
           { cache: "no-store" },
         );
-        if (res.ok) {
+        if (res.ok) { 
           const data = await res.json();
           if (data) {
             setFormData({
