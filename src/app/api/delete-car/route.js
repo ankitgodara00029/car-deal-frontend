@@ -23,12 +23,21 @@ export async function DELETE(request) {
     }
 
     // First, fetch the car to verify ownership
-    const car = await client.fetch(`*[_type == "car" && _id == $carId][0]`, {
-      carId,
-    });
+    const car = await client.fetch(
+      `*[_type == "car" && _id == $carId][0]{ _id, userId, clerkUserId }`,
+      {
+        carId,
+      },
+    );
 
     if (!car) {
       return NextResponse.json({ error: "Car not found" }, { status: 404 });
+    }
+
+    // Check ownership (support both clerkUserId and userId field names)
+    const ownerId = car.clerkUserId || car.userId;
+    if (ownerId !== userId) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
     }
 
     // Delete the car

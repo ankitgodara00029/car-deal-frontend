@@ -42,11 +42,17 @@ const Faq = () => {
                 />
               </svg>
             </div>
-            {openIndex === index && (
-              <p className="mt-1.5 text-black text-sm sm:text-base text-opacity-60 max-w-[800px]">
-                {faq.answer}
-              </p>
-            )}
+            <div
+              className={`grid transition-all duration-300 ${
+                openIndex === index ? "grid-rows-[1fr] mt-2" : "grid-rows-[0fr]"
+              }`}
+            >
+              <div className="overflow-hidden">
+                <p className="text-black text-sm sm:text-base text-opacity-60 max-w-[800px]">
+                  {faq.answer}
+                </p>
+              </div>
+            </div>
           </div>
         ))}
       </div>

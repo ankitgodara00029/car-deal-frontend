@@ -67,7 +67,7 @@ export default function RootLayout({ children }) {
           <Header />
           {children}
           <Footer />
-          <BackToTop />
+          {/* <BackToTop /> */}
           <Preloader />
           <ToastContainer
             position="top-right"

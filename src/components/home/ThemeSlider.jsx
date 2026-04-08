@@ -25,8 +25,6 @@ const ThemeSlider = ({ imageData }) => {
     setIsOpen(true);
   };
 
-  console.log(imageData, "imageDataimageData");
-
   // Filter valid images
   const validImages =
     imageData?.filter((obj) => obj && obj._type === "image") || [];

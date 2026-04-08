@@ -1,5 +1,5 @@
 "use client";
-
+import CommonInput from "@/components/common/CommonInput";
 import { useSignUp, useClerk } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -99,49 +99,43 @@ export default function CustomSignUp() {
 
   // ---------------- UI ----------------
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50">
-      <div className="w-[380px] bg-white p-6 rounded shadow">
+    <div className="py-20 flex items-center justify-center bg-gray-50 px-5">
+      <div className="max-w-[400px] mx-auto w-full bg-white p-6 rounded-xl shadow">
         {step === "form" && (
           <>
             <h2 className="text-2xl font-semibold mb-4">Create Account</h2>
 
             {error && <p className="text-red-500 mb-3">{error}</p>}
 
-            <form onSubmit={handleSignUp}>
-              <input
+            <form onSubmit={handleSignUp} className="space-y-4">
+              <CommonInput
                 placeholder="First Name"
-                className="input"
                 value={form.firstName}
                 onChange={(e) =>
                   setForm({ ...form, firstName: e.target.value })
                 }
               />
 
-              <input
+              <CommonInput
                 placeholder="Last Name"
-                className="input"
                 value={form.lastName}
                 onChange={(e) => setForm({ ...form, lastName: e.target.value })}
               />
 
-              <input
+              <CommonInput
                 type="email"
                 placeholder="Email"
-                className="input"
                 value={form.email}
                 onChange={(e) => setForm({ ...form, email: e.target.value })}
               />
 
-              <input
+              <CommonInput
                 type="password"
                 placeholder="Password"
-                className="input"
                 value={form.password}
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
               />
-
               <div id="clerk-captcha" />
-
               <button
                 type="submit"
                 disabled={isLoading}

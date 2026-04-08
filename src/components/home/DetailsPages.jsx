@@ -143,7 +143,7 @@ const DetailsPages = () => {
               d="M15 19l-7-7 7-7"
             />
           </svg>
-          Back to Cars
+          Back
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -156,36 +156,39 @@ const DetailsPages = () => {
             </h2>
             <div className="mt-3">
               <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
-                <span>Price:</span> <span>₹{car.price}</span>
+                <span>Contact Number</span> <Link href={`tel:${car.number}`} className="text-blue-500 duration-300 hover:text-[#ff5e00]">{car.number}</Link>
               </p>
               <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
-                <span>Model:</span> <span>{car.model}</span>
+                <span>Price</span> <span>₹{car.price}</span>
               </p>
               <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
-                <span>Owner:</span> <span>{car.owner}</span>
+                <span>Model</span> <span>{car.model}</span>
               </p>
               <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
-                <span>Fuel Type:</span> <span>{car.fuel}</span>
+                <span>Owner</span> <span>{car.owner}</span>
               </p>
               <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
-                <span>Kilometers Driven:</span> <span>{car.kilometers} KM</span>
+                <span>Fuel Type</span> <span>{car.fuel}</span>
               </p>
               <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
-                <span>Original:</span> <span>{car.original}%</span>
+                <span>KM Driven</span> <span>{car.kilometers} KM</span>
               </p>
               <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
-                <span>Tyre Condition:</span> <span>{car.tyre}%</span>
+                <span>Original Paint (%)</span> <span>{car.original}</span>
               </p>
               <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
-                <span>Interior Condition:</span>
-                <span>{car.interior}%</span>
+                <span>Tyre Condition (%)</span> <span>{car.tyre}</span>
               </p>
               <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
-                <span>Engine Condition:</span>
-                <span>{car.engine}%</span>
+                <span>Interior Condition (%)</span>
+                <span>{car.interior}</span>
               </p>
               <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
-                <span>Upload Date:</span>
+                <span>Engine Condition (%)</span>
+                <span>{car.engine}</span>
+              </p>
+              <p className="text-base md:text-lg leading-[120%] text-black flex justify-between border-t py-2 px-4 sm:px-6">
+                <span>Upload Date</span>
                 <span>
                   {new Date(car._createdAt).toLocaleDateString("en-US", {
                     month: "short",
@@ -269,7 +272,7 @@ const DetailsPages = () => {
                 <div className="flex justify-between pb-3">
                   <p className="text-base sm:text-lg">Fuel: {obj.fuel}</p>
                 </div>
-                <Cta url={`/${obj._id}`}>View Complete Details</Cta>
+                <Cta url={`/${obj._id}`}>View Details</Cta>
               </div>
             </div>
           ))}

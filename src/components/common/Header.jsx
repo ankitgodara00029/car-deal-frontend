@@ -1,19 +1,14 @@
 "use client";
-import { NAV_LIST, NAV_LIST_SIGNED_IN } from "@/utils/helper";
-import { SignedIn, SignedOut, useUser } from "@clerk/nextjs";
-import CustomUserButton from "./CustomUserButton";
+import { NAV_LIST } from "@/utils/helper";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import Cta from "./Cta";
+import CustomUserButton from "./CustomUserButton";
 
 const Header = () => {
   const pathname = usePathname();
-  const { isSignedIn } = useUser();
-
-  // Use different navigation based on sign-in status
-  const navigationList = isSignedIn ? NAV_LIST_SIGNED_IN : NAV_LIST;
-
   return (
     <div className="bg-[#1f2937] py-3 md:py-4 md:sticky top-0 z-10">
       <div className="container mx-auto max-w-[1180px] px-5 flex justify-between items-center">
@@ -29,7 +24,7 @@ const Header = () => {
         <ul
           className={`flex gap-3 sm:gap-6 items-center max-md:justify-between max-md:pe-5 max-md:fixed max-md:bottom-0 z-30 max-md:w-full start-0 max-md:bg-[#1f2937] max-md:items-start max-md:ps-6 max-md:py-3 transition-all duration-300`}
         >
-          {navigationList.map((obj, index) => {
+          {NAV_LIST.map((obj, index) => {
             const basePath = obj.url.split("?")[0];
             const isActive = pathname === basePath;
             return (

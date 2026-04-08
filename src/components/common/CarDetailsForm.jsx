@@ -127,7 +127,7 @@ const CarDetailsForm = () => {
       }
 
       await response.json();
-      toast.success("Your Data submitted successfully");
+      toast.success("Car details submitted successfully!");
 
       // Reset form state
       setFormData({

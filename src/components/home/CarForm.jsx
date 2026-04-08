@@ -64,8 +64,6 @@ export default function CarForm({ onSubmit }) {
     setShowPopup(false);
     setIsLoading(true); // Show loader
     try {
-      console.log("Form submitted with data:", formData);
-
       // Validate required fields
       if (
         !formData.name ||
@@ -79,9 +77,8 @@ export default function CarForm({ onSubmit }) {
 
       // Call the onSubmit function passed as prop
       if (onSubmit) {
-        console.log("Calling onSubmit function...");
         await onSubmit(formData);
-        toast.success("Your Data submitted successfully");
+        toast.success("Car details submitted successfully!");
       } else {
         console.error("No onSubmit function provided!");
         toast.error("No submission handler provided");

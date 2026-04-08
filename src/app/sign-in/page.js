@@ -129,7 +129,7 @@ export default function CustomSignIn() {
   };
 
   return (
-    <div className="min-h-[calc(100vh-150px)] flex items-center justify-center">
+    <div className="flex items-center justify-center py-20 px-5">
       <form
         onSubmit={
           showCodeVerification
@@ -138,7 +138,7 @@ export default function CustomSignIn() {
               ? handleForgotPassword
               : handleSubmit
         }
-        className="w-full space-y-4 mx-auto border shadow-md bg-white max-w-[440px] px-5 py-6 rounded-lg"
+        className="w-full space-y-4 mx-auto border shadow bg-white max-w-[440px] px-5 py-6 rounded-xl"
       >
         <h2 className="text-2xl mb-4">
           {showCodeVerification

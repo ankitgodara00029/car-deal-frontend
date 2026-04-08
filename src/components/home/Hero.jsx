@@ -10,12 +10,20 @@ const Hero = ({ title, description }) => {
           <p className="text-white text-sm sm:text-base lg:text-lg pt-2 sm:pt-3 pb-4 sm:pb-6">
             {description}
           </p>
-          <Cta
-            url="/post-your-car#car-details-form"
-            className="!w-auto inline-block px-3 sm:px-5"
-          >
-            Add New Car
-          </Cta>
+          <div className="flex gap-6 max-lg:justify-center">
+            <Cta
+              url="/post-your-car#car-details-form"
+              className="!w-auto inline-block px-3 sm:px-5"
+            >
+              Add New Car
+            </Cta>
+            <Cta
+              url="/post-dealer-info"
+              className="!w-auto inline-block px-3 sm:px-5 bg-white !text-[#ff5e00] hover:bg-transparent"
+            >
+              Add Business
+            </Cta>
+          </div>
         </div>
       </div>
     </div>

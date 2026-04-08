@@ -135,11 +135,11 @@ const CardsData = ({ initialCars }) => {
                               url: window.location.origin + "/" + obj._id, // Use Sanity _id
                             })
                             .catch((error) =>
-                              console.error("Error sharing:", error)
+                              console.error("Error sharing:", error),
                             );
                         } else {
                           navigator.clipboard.writeText(
-                            window.location.origin + "/" + obj._id
+                            window.location.origin + "/" + obj._id,
                           );
                           alert("Link copied to clipboard!");
                         }
@@ -154,7 +154,7 @@ const CardsData = ({ initialCars }) => {
                       />
                     </span>
                   </div>
-                  <Cta url={`/${obj._id}`}>View Complete Details</Cta>
+                  <Cta url={`/${obj._id}`}>View Details</Cta>
                 </div>
               </div>
             ))}

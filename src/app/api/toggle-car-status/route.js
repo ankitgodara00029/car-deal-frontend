@@ -30,6 +30,11 @@ export async function PATCH(request) {
       return NextResponse.json({ error: "Car not found" }, { status: 404 });
     }
 
+    // Check ownership
+    if (car.clerkUserId !== userId) {
+      return NextResponse.json({ error: "Forbidden" }, { status: 403 });
+    }
+
     // Update the car status
     const updatedCar = await client.patch(carId).set({ isActive }).commit();
 

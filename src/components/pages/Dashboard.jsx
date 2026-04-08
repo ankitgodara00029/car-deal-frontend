@@ -1,11 +1,15 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useUser } from "@clerk/nextjs";
 import { client, urlFor } from "@/utils/sanity";
 import Image from "next/image";
 import { toast } from "react-toastify";
 import CustomPopup from "@/components/common/CustomPopup";
-import Preloader from "@/components/common/Preloader";
+import Loader from "../common/Loader";
+import CommonInput from "@/components/common/CommonInput";
+import CommonSelect from "@/components/common/CommonSelect";
+import Link from "next/link";
+import Cta from "../common/Cta";
 
 const Dashboard = () => {
   const { user, isLoaded } = useUser();
@@ -13,35 +17,24 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(true);
   const [deletePopup, setDeletePopup] = useState(false);
   const [selectedCar, setSelectedCar] = useState(null);
-  const [deleting, setDeleting] = useState(false);
   const [activeTab, setActiveTab] = useState("cars");
-  const [toggling, setToggling] = useState(null);
-  const [filter, setFilter] = useState("all"); // all, active, inactive
 
-  // Fetch user's posted cars
+  // Edit modal state
+  const [editCar, setEditCar] = useState(null);
+  const [editForm, setEditForm] = useState({});
+  const [newImages, setNewImages] = useState([]);
+  const [updating, setUpdating] = useState(false);
+  const fileInputRef = useRef(null);
+
   const fetchUserCars = async () => {
     if (!user?.id) return;
-
     try {
       setLoading(true);
       const query = `*[_type == "car" && userId == $userId] | order(_createdAt desc) {
-  _id,
-  _createdAt,
-  car,
-  model,
-  price,
-  kilometers,
-  fuel, 
-  name,
-  number,
-  images,
-  userId
-}`;
-
-      const cars = await client.fetch(query, {
-        userId: user.id,
-      });
-      console.log(cars, "carscars");
+        _id, _createdAt, car, model, price, kilometers, fuel, name, number,
+        owner, original, tyre, interior, engine, images, userId
+      }`;
+      const cars = await client.fetch(query, { userId: user.id });
       setUserCars(cars);
     } catch (error) {
       console.error("Error fetching user cars:", error);
@@ -51,88 +44,98 @@ const Dashboard = () => {
     }
   };
 
-  // Delete car function
   const deleteCar = async () => {
     if (!selectedCar) return;
-
     try {
-      setDeleting(true);
-
       const response = await fetch(`/api/delete-car?id=${selectedCar._id}`, {
         method: "DELETE",
       });
-
-      if (!response.ok) {
-        throw new Error("Failed to delete car");
-      }
-
-      // Update local state
+      if (!response.ok) throw new Error("Failed to delete car");
       setUserCars((prev) => prev.filter((car) => car._id !== selectedCar._id));
-
       toast.success("Car deleted successfully!");
       setDeletePopup(false);
       setSelectedCar(null);
     } catch (error) {
       console.error("Error deleting car:", error);
       toast.error("Failed to delete car");
-    } finally {
-      setDeleting(false);
     }
   };
 
-  // Handle delete click
   const handleDeleteClick = (car) => {
     setSelectedCar(car);
     setDeletePopup(true);
   };
 
-  // Toggle car active status
-  const toggleCarStatus = async (carId, currentStatus) => {
-    try {
-      setToggling(carId);
+  const handleEditClick = (car) => {
+    setEditCar(car);
+    setEditForm({
+      name: car.name || "",
+      number: car.number || "",
+      car: car.car || "",
+      price: car.price || "",
+      model: car.model || "",
+      owner: car.owner || "",
+      fuel: car.fuel || "",
+      kilometers: car.kilometers || "",
+      original: car.original || "",
+      tyre: car.tyre || "",
+      interior: car.interior || "",
+      engine: car.engine || "",
+    });
+    setNewImages([]);
+  };
 
-      const response = await fetch("/api/toggle-car-status", {
+  const handleEditChange = (e) => {
+    const { id, value } = e.target;
+    setEditForm((prev) => ({ ...prev, [id]: value }));
+  };
+
+  const handleUpdateSubmit = async (e) => {
+    e.preventDefault();
+    setUpdating(true);
+    try {
+      const formData = new FormData();
+      formData.append("carId", editCar._id);
+      formData.append("carData", JSON.stringify(editForm));
+      newImages.forEach((file) => formData.append("images", file));
+
+      const response = await fetch("/api/update-car", {
         method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          carId,
-          isActive: !currentStatus,
-        }),
+        body: formData,
       });
 
-      if (!response.ok) {
-        throw new Error("Failed to update car status");
-      }
+      if (!response.ok) throw new Error("Failed to update car");
 
-      // Update local state
+      const updated = await response.json();
       setUserCars((prev) =>
-        prev.map((car) =>
-          car._id === carId ? { ...car, isActive: !currentStatus } : car,
+        prev.map((c) =>
+          c._id === editCar._id ? { ...c, ...editForm, ...updated } : c,
         ),
       );
-
-      toast.success(
-        `Car ${!currentStatus ? "activated" : "deactivated"} successfully!`,
-      );
+      toast.success("Your car details have been updated");
+      setEditCar(null);
     } catch (error) {
-      console.error("Error toggling car status:", error);
-      toast.error("Failed to update car status");
+      console.error("Error updating car:", error);
+      toast.error("Failed to update car");
     } finally {
-      setToggling(null);
+      setUpdating(false);
     }
   };
 
   useEffect(() => {
-    if (isLoaded && user) {
-      fetchUserCars();
-    }
+    if (isLoaded && user) fetchUserCars();
   }, [isLoaded, user]);
 
-  if (!isLoaded || loading) {
-    return <Preloader />;
-  }
+  useEffect(() => {
+    if (editCar) {
+      document.body.classList.add("overflow-hidden");
+    } else {
+      document.body.classList.remove("overflow-hidden");
+    }
+    return () => document.body.classList.remove("overflow-hidden");
+  }, [editCar]);
+
+  if (!isLoaded || loading) return <Loader />;
 
   if (!user) {
     return (
@@ -143,7 +146,7 @@ const Dashboard = () => {
           </h2>
           <a
             href="/sign-in"
-            className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+            className="bg-[#ff5e00]/80 text-white px-6 py-3 rounded-lg bg-[#ff5e00] transition-colors"
           >
             Sign In
           </a>
@@ -152,21 +155,14 @@ const Dashboard = () => {
     );
   }
 
-  // Filter cars based on selected filter
-  const filteredCars = userCars.filter((car) => {
-    if (filter === "active") return car.isActive !== false;
-    if (filter === "inactive") return car.isActive === false;
-    return true; // all
-  });
-
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="bg-gray-50 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="bg-white rounded-lg shadow-sm p-6 mb-8">
           <div className="flex items-center space-x-4">
             <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center">
-              {user.imageUrl ? (
+              {/* {user.imageUrl ? (
                 <Image
                   src={user.imageUrl}
                   alt="Profile"
@@ -174,12 +170,12 @@ const Dashboard = () => {
                   height={64}
                   className="rounded-full"
                 />
-              ) : (
-                <span className="text-2xl font-bold text-blue-600">
-                  {user.firstName?.[0] ||
-                    user.emailAddresses[0].emailAddress[0].toUpperCase()}
-                </span>
-              )}
+              ) : ( */}
+              <span className="text-2xl font-bold text-blue-600">
+                {user.firstName?.[0] ||
+                  user.emailAddresses[0].emailAddress[0].toUpperCase()}
+              </span>
+              {/* )} */}
             </div>
             <div>
               <h1 className="text-2xl font-bold text-gray-900">
@@ -193,26 +189,14 @@ const Dashboard = () => {
         </div>
 
         {/* Quick Actions */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
-          <a
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8">
+          <Link
             href="/post-your-car"
-            className="bg-blue-600 text-white p-4 rounded-lg hover:bg-blue-700 transition-colors text-center"
+            className="bg-[#ff5e00]/80 text-white p-4 rounded-lg bg-[#ff5e00] transition-colors text-center"
           >
             <div className="text-2xl mb-2">🚗</div>
             <div className="font-medium">Post New Car</div>
-          </a>
-          <div className="bg-green-100 p-4 rounded-lg text-center">
-            <div className="text-2xl mb-2">✅</div>
-            <div className="font-medium text-green-800">
-              {userCars.filter((car) => car.isActive !== false).length} Active
-            </div>
-          </div>
-          <div className="bg-yellow-100 p-4 rounded-lg text-center">
-            <div className="text-2xl mb-2">⏸️</div>
-            <div className="font-medium text-yellow-800">
-              {userCars.filter((car) => car.isActive === false).length} Inactive
-            </div>
-          </div>
+          </Link>
           <div className="bg-purple-100 p-4 rounded-lg text-center">
             <div className="text-2xl mb-2">📊</div>
             <div className="font-medium text-purple-800">
@@ -227,111 +211,41 @@ const Dashboard = () => {
             <nav className="-mb-px flex space-x-8 px-6">
               <button
                 onClick={() => setActiveTab("cars")}
-                className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === "cars"
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
+                className={`py-4 px-1 duration-300 border-b-2 font-medium text-sm ${activeTab === "cars" ? "border-[#ff5e00] text-[#ff5e00]" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-700"}`}
               >
                 My Cars ({userCars.length})
               </button>
               <button
                 onClick={() => setActiveTab("profile")}
-                className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === "profile"
-                    ? "border-blue-500 text-blue-600"
-                    : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300"
-                }`}
+                className={`py-4 px-1 duration-300 border-b-2 font-medium text-sm ${activeTab === "profile" ? "border-[#ff5e00] text-[#ff5e00]" : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-700"}`}
               >
                 Profile
               </button>
             </nav>
           </div>
 
-          {/* Tab Content */}
-          <div className="p-6">
+          <div className="p-4 sm:p-6">
             {activeTab === "cars" && (
               <div>
-                {/* Filter buttons */}
-                <div className="flex space-x-4 mb-6">
-                  <button
-                    onClick={() => setFilter("all")}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      filter === "all"
-                        ? "bg-blue-600 text-white"
-                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                    }`}
-                  >
-                    All Cars ({userCars.length})
-                  </button>
-                  <button
-                    onClick={() => setFilter("active")}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      filter === "active"
-                        ? "bg-green-600 text-white"
-                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                    }`}
-                  >
-                    Active (
-                    {userCars.filter((car) => car.isActive !== false).length})
-                  </button>
-                  <button
-                    onClick={() => setFilter("inactive")}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-                      filter === "inactive"
-                        ? "bg-red-600 text-white"
-                        : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                    }`}
-                  >
-                    Inactive (
-                    {userCars.filter((car) => car.isActive === false).length})
-                  </button>
-                </div>
-
-                {filteredCars.length === 0 ? (
+                {userCars.length === 0 ? (
                   <div className="text-center py-12">
-                    <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-                      <svg
-                        className="w-12 h-12 text-gray-400"
-                        fill="none"
-                        stroke="currentColor"
-                        viewBox="0 0 24 24"
-                      >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                        />
-                      </svg>
-                    </div>
                     <h3 className="text-lg font-medium text-gray-900 mb-2">
-                      {filter === "all"
-                        ? "No cars posted yet"
-                        : `No ${filter} cars found`}
+                      No cars posted yet
                     </h3>
                     <p className="text-gray-500 mb-6">
-                      {filter === "all"
-                        ? "Start by posting your first car to sell"
-                        : `You don't have any ${filter} cars at the moment`}
+                      Start by posting your first car to sell
                     </p>
-                    {filter === "all" && (
-                      <a
-                        href="/post-your-car"
-                        className="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
-                      >
-                        Post Your Car
-                      </a>
-                    )}
+                    <Cta className="max-w-[170px] mx-auto" url="/post-your-car">
+                      Post Your Car
+                    </Cta>
                   </div>
                 ) : (
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {filteredCars.map((car) => (
+                    {userCars.map((car) => (
                       <div
                         key={car._id}
                         className="bg-white border border-gray-200 rounded-lg overflow-hidden hover:shadow-lg transition-shadow"
                       >
-                        {/* Car Image */}
                         <div className="relative h-48 bg-gray-200">
                           {car.images && car.images.length > 0 ? (
                             <Image
@@ -345,54 +259,28 @@ const Dashboard = () => {
                               <span className="text-gray-400">No Image</span>
                             </div>
                           )}
-                          <div className="absolute top-2 right-2">
-                            <span
-                              className={`px-2 py-1 text-xs rounded-full ${
-                                car.isActive !== false
-                                  ? "bg-green-100 text-green-800"
-                                  : "bg-red-100 text-red-800"
-                              }`}
-                            >
-                              {car.isActive !== false ? "Active" : "Inactive"}
-                            </span>
-                          </div>
                         </div>
-
-                        {/* Car Details */}
                         <div className="p-4">
                           <h3 className="font-semibold text-lg text-gray-900 mb-2">
                             {car.car} {car.model}
                           </h3>
                           <div className="space-y-1 text-sm text-gray-600 mb-4">
-                            <p>Year: {car.model}</p>
                             <p>Price: ₹{car.price?.toLocaleString()}</p>
-                            <p>Mileage: {car.kilometers} km/l</p>
+                            <p>Kilometers: {car.kilometers}</p>
                             <p>Fuel: {car.fuel}</p>
                           </div>
-
                           <div className="flex space-x-2">
-                            <a
+                            <Link
                               href={`/${car._id}`}
-                              className="flex-1 bg-blue-600 text-white text-center py-2 px-4 rounded-md hover:bg-blue-700 transition-colors text-sm"
+                              className="flex-1 bg-gray-600 text-white text-center py-2 px-4 rounded-md hover:bg-gray-700 transition-colors text-sm"
                             >
-                              View Details
-                            </a>
+                              View
+                            </Link>
                             <button
-                              onClick={() =>
-                                toggleCarStatus(car._id, car.isActive !== false)
-                              }
-                              disabled={toggling === car._id}
-                              className={`py-2 px-4 rounded-md transition-colors text-sm ${
-                                car.isActive !== false
-                                  ? "bg-yellow-600 text-white hover:bg-yellow-700"
-                                  : "bg-green-600 text-white hover:bg-green-700"
-                              } disabled:opacity-50`}
+                              onClick={() => handleEditClick(car)}
+                              className="flex-1 bg-[#ff5e00]/80 text-white text-center py-2 px-4 rounded-md bg-[#ff5e00] transition-colors text-sm"
                             >
-                              {toggling === car._id
-                                ? "..."
-                                : car.isActive !== false
-                                  ? "Deactivate"
-                                  : "Activate"}
+                              Edit
                             </button>
                             <button
                               onClick={() => handleDeleteClick(car)}
@@ -433,7 +321,6 @@ const Dashboard = () => {
                       </div>
                     </div>
                   </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Email Address
@@ -442,49 +329,12 @@ const Dashboard = () => {
                       {user.emailAddresses[0].emailAddress}
                     </div>
                   </div>
-
                   <div>
                     <label className="block text-sm font-medium text-gray-700 mb-2">
                       Member Since
                     </label>
                     <div className="bg-gray-50 border border-gray-300 rounded-md px-3 py-2">
                       {new Date(user.createdAt).toLocaleDateString()}
-                    </div>
-                  </div>
-
-                  <div className="pt-4">
-                    <h3 className="text-lg font-medium text-gray-900 mb-4">
-                      Account Statistics
-                    </h3>
-                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                      <div className="bg-blue-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-blue-600">
-                          {userCars.length}
-                        </div>
-                        <div className="text-sm text-blue-800">Cars Posted</div>
-                      </div>
-                      <div className="bg-green-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-green-600">
-                          {
-                            userCars.filter((car) => car.isActive !== false)
-                              .length
-                          }
-                        </div>
-                        <div className="text-sm text-green-800">
-                          Active Listings
-                        </div>
-                      </div>
-                      <div className="bg-purple-50 p-4 rounded-lg">
-                        <div className="text-2xl font-bold text-purple-600">
-                          {
-                            userCars.filter((car) => car.isActive === false)
-                              .length
-                          }
-                        </div>
-                        <div className="text-sm text-purple-800">
-                          Inactive Listings
-                        </div>
-                      </div>
                     </div>
                   </div>
                 </div>
@@ -494,7 +344,232 @@ const Dashboard = () => {
         </div>
       </div>
 
-      {/* Delete Confirmation Popup */}
+      {/* Edit Modal */}
+      {editCar && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 p-4">
+          <div className="bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[90vh] overflow-y-auto">
+            <div className="flex items-center justify-between p-6 border-b">
+              <h2 className="text-xl font-semibold text-gray-900">Edit Car</h2>
+              <button
+                onClick={() => setEditCar(null)}
+                className="text-gray-400 hover:text-gray-600 text-2xl leading-none"
+              >
+                &times;
+              </button>
+            </div>
+            <form
+              onSubmit={handleUpdateSubmit}
+              className="p-6 grid grid-cols-1 sm:grid-cols-2 gap-4"
+            >
+              <CommonInput
+                id="name"
+                label="Name"
+                placeholder="Enter Name"
+                value={editForm.name}
+                onChange={handleEditChange}
+                required
+              />
+              <CommonInput
+                id="number"
+                type="number"
+                label="Phone"
+                placeholder="Enter Phone Number"
+                value={editForm.number}
+                onChange={handleEditChange}
+                required
+              />
+              <CommonInput
+                id="car"
+                label="Car Name"
+                placeholder="Enter Car Name"
+                value={editForm.car}
+                onChange={handleEditChange}
+                required
+              />
+              <CommonInput
+                id="price"
+                type="number"
+                label="Price"
+                placeholder="Enter Price"
+                value={editForm.price}
+                onChange={handleEditChange}
+                required
+              />
+              <CommonInput
+                id="model"
+                type="number"
+                label="Model"
+                placeholder="Enter Model Year"
+                value={editForm.model}
+                onChange={handleEditChange}
+                required
+              />
+              <CommonSelect
+                id="owner"
+                label="Owner"
+                options={["1st", "2nd", "3rd"]}
+                value={editForm.owner}
+                onChange={handleEditChange}
+                required
+              />
+              <CommonSelect
+                id="fuel"
+                label="Fuel Type"
+                options={[
+                  "Petrol",
+                  "Diesel",
+                  "Electric",
+                  "Hybrid",
+                  "CNG",
+                  "LPG",
+                ]}
+                value={editForm.fuel}
+                onChange={handleEditChange}
+                required
+              />
+              <CommonInput
+                id="kilometers"
+                type="number"
+                label="Kilometers Driven"
+                placeholder="Enter Kilometers"
+                value={editForm.kilometers}
+                onChange={handleEditChange}
+                required
+              />
+              <CommonSelect
+                id="original"
+                label="Original Condition (%)"
+                options={[
+                  "10",
+                  "20",
+                  "30",
+                  "40",
+                  "50",
+                  "60",
+                  "70",
+                  "80",
+                  "90",
+                  "100",
+                ]}
+                value={editForm.original}
+                onChange={handleEditChange}
+                required
+              />
+              <CommonSelect
+                id="tyre"
+                label="Tyre Condition (%)"
+                options={[
+                  "10",
+                  "20",
+                  "30",
+                  "40",
+                  "50",
+                  "60",
+                  "70",
+                  "80",
+                  "90",
+                  "100",
+                ]}
+                value={editForm.tyre}
+                onChange={handleEditChange}
+                required
+              />
+              <CommonSelect
+                id="interior"
+                label="Interior Condition (%)"
+                options={[
+                  "10",
+                  "20",
+                  "30",
+                  "40",
+                  "50",
+                  "60",
+                  "70",
+                  "80",
+                  "90",
+                  "100",
+                ]}
+                value={editForm.interior}
+                onChange={handleEditChange}
+                required
+              />
+              <CommonSelect
+                id="engine"
+                label="Engine Condition (%)"
+                options={[
+                  "10",
+                  "20",
+                  "30",
+                  "40",
+                  "50",
+                  "60",
+                  "70",
+                  "80",
+                  "90",
+                  "100",
+                ]}
+                value={editForm.engine}
+                onChange={handleEditChange}
+                required
+              />
+
+              {/* Image Upload */}
+              <div className="sm:col-span-2">
+                <label
+                  htmlFor="edit-images"
+                  className="block text-sm font-medium text-gray-700 mb-1"
+                >
+                  Replace Images (optional)
+                </label>
+                <input
+                  type="file"
+                  id="edit-images"
+                  multiple
+                  accept="image/*"
+                  ref={fileInputRef}
+                  onChange={(e) => setNewImages(Array.from(e.target.files))}
+                  className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded file:border-0 file:text-sm file:bg-blue-50 file:text-blue-700 hover:file:bg-blue-100"
+                />
+                {newImages.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mt-2">
+                    {newImages.map((img, i) => (
+                      <div
+                        key={i}
+                        className="relative w-16 h-16 border rounded overflow-hidden"
+                      >
+                        <Image
+                          src={URL.createObjectURL(img)}
+                          alt={`preview-${i}`}
+                          fill
+                          className="object-cover"
+                        />
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              <div className="sm:col-span-2 flex justify-end gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={() => setEditCar(null)}
+                  className="px-6 py-2 rounded-md border border-gray-300 text-gray-700 hover:bg-gray-50 text-sm"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  disabled={updating}
+                  className="px-6 py-2 rounded-md bg-[#ff5e00]/80 text-white bg-[#ff5e00] text-sm disabled:opacity-50"
+                >
+                  {updating ? "Updating..." : "Update Car"}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {deletePopup && (
         <CustomPopup
           handleConfirm={deleteCar}

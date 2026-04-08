@@ -39,6 +39,7 @@ export async function POST(request) {
     const result = await writeClient.create({
       _type: "car",
       ...carData,
+      clerkUserId: userId,
       images: uploadedImages,
     });
 
