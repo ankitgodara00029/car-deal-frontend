@@ -4,7 +4,7 @@ const isProtectedRoute = createRouteMatcher([
   "/dashboard(.*)",
   "/admin-data(.*)",
   "/post-your-car(.*)",
-  "/post-dealer-info(.*)",
+  "/post-your-car(.*)",
 ]);
 
 export default clerkMiddleware(async (auth, req) => {

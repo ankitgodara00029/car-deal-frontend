@@ -1,4 +1,6 @@
+import { Suspense } from "react";
 import Dashboard from "@/components/pages/Dashboard";
+import Loader from "@/components/common/Loader";
 
 export const metadata = {
   title: "Dashboard - Car Deal",
@@ -11,5 +13,9 @@ export const metadata = {
 };
 
 export default function DashboardPage() {
-  return <Dashboard />;
+  return (
+    <Suspense fallback={<Loader />}>
+      <Dashboard />
+    </Suspense>
+  );
 }

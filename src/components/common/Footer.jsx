@@ -67,7 +67,7 @@ const Footer = () => {
                 <Link
                   rel="noopener noreferrer"
                   aria-label="links"
-                  href="/post-your-car"
+                  href="/post?tab=car"
                   className="text-white opacity-70 hover:opacity-100 transition-all ease-in-out duration-300"
                 >
                   Post Your Car

@@ -8,7 +8,7 @@ import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
 export const metadata = {
-  metadataBase: new URL("https://www.car-deal.shop"),
+  metadataBase: new URL("https://car-deals.vercel.app"),
 
   title: "Your Trusted Marketplace for Cars!",
   description:
@@ -16,7 +16,7 @@ export const metadata = {
 
   // ✅ Google Search Console verification
   verification: {
-    google: "KXbx0S_KtpHEM7ewZFOcHLgrzQIvnfu2yhFka518alM",
+    google: "JQdMIaicN5_A0dQCly13rDOWDfVfbFcxmFGO-dCC4zM",
   },
 
   // ✅ Open Graph (Facebook, LinkedIn sharing)
@@ -24,7 +24,7 @@ export const metadata = {
     title: "Your Trusted Marketplace for Cars!",
     description:
       "Find the perfect car or sell yours at the best price—all in one place.",
-    url: "https://www.car-deal.shop",
+    url: "https://car-deals.vercel.app",
     siteName: "Car Deal",
     images: [
       {

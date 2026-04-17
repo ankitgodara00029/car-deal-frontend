@@ -12,13 +12,13 @@ const Hero = ({ title, description }) => {
           </p>
           <div className="flex gap-6 max-lg:justify-center">
             <Cta
-              url="/post-your-car#car-details-form"
+              url="/post-your-car?tab=car"
               className="!w-auto inline-block px-3 sm:px-5"
             >
               Add New Car
             </Cta>
             <Cta
-              url="/post-dealer-info"
+              url="/post-your-car?tab=dealer"
               className="!w-auto inline-block px-3 sm:px-5 bg-white !text-[#ff5e00] hover:bg-transparent"
             >
               Add Business

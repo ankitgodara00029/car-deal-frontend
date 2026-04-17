@@ -1,43 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://www.car-deal.shop/</loc>
+    <loc>https://car-deals.vercel.app/</loc>
     <lastmod>2026-03-29</lastmod>
   </url>
   <url>
-    <loc>https://www.car-deal.shop/about-us</loc>
+    <loc>https://car-deals.vercel.app/about-us</loc>
     <lastmod>2026-03-29</lastmod>
   </url>
   <url>
-    <loc>https://www.car-deal.shop/admin-data</loc>
-    <lastmod>2026-03-29</lastmod>
-  </url>
-  <!-- <url>
-    <loc>https://www.car-deal.shop/dashboard</loc>
-    <lastmod>2026-03-29</lastmod>
-  </url> -->
-  <url>
-    <loc>https://www.car-deal.shop/our-services</loc>
+    <loc>https://car-deals.vercel.app/admin-data</loc>
     <lastmod>2026-03-29</lastmod>
   </url>
   <!-- <url>
-    <loc>https://www.car-deal.shop/post-your-car</loc>
+    <loc>https://car-deals.vercel.app/dashboard</loc>
     <lastmod>2026-03-29</lastmod>
   </url> -->
   <url>
-    <loc>https://www.car-deal.shop/privacy-policy</loc>
+    <loc>https://car-deals.vercel.app/our-services</loc>
+    <lastmod>2026-03-29</lastmod>
+  </url>
+  <!-- <url>
+    <loc>https://car-deals.vercel.app/post-your-car</loc>
+    <lastmod>2026-03-29</lastmod>
+  </url> -->
+  <url>
+    <loc>https://car-deals.vercel.app/privacy-policy</loc>
     <lastmod>2026-03-29</lastmod>
   </url>
   <url>
-    <loc>https://www.car-deal.shop/sign-in</loc>
+    <loc>https://car-deals.vercel.app/sign-in</loc>
     <lastmod>2026-03-29</lastmod>
   </url>
   <url>
-    <loc>https://www.car-deal.shop/sign-up</loc>
+    <loc>https://car-deals.vercel.app/sign-up</loc>
     <lastmod>2026-03-29</lastmod>
   </url>
   <url>
-    <loc>https://www.car-deal.shop/terms-conditions</loc>
+    <loc>https://car-deals.vercel.app/terms-conditions</loc>
     <lastmod>2026-03-29</lastmod>
   </url>
 </urlset>

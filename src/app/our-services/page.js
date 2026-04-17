@@ -1,6 +1,6 @@
 import Services from "@/components/pages/Services";
 export const metadata = {
-  metadataBase: "https://www.car-deal.shop/",
+  metadataBase: "https://car-deals.vercel.app/",
   title: "Our Services Your One-Stop Car Marketplace",
   description:
     "We offer a range of services to make buying and selling cars safe, easy, and hassle-free. Whether you’re looking for a new ride or selling your old one, we’ve got you covered!",

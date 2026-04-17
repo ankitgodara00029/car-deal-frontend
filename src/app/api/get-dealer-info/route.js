@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { client, urlFor } from "@/utils/sanity";
+import { writeClient, urlFor } from "@/utils/sanity";
 
 export const dynamic = "force-dynamic";
 
@@ -12,11 +12,12 @@ export async function GET(request) {
       return NextResponse.json({ error: "userId required" }, { status: 400 });
     }
 
-    const dealer = await client.fetch(
+    const dealer = await writeClient.fetch(
       `*[_type == "dealerInfo" && clerkUserId == $userId][0] {
         _id, name, businessName, address, phone, image
       }`,
       { userId },
+      { cache: "no-cache" },
     );
 
     if (!dealer) {

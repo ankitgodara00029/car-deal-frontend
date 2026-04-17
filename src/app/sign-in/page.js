@@ -4,11 +4,11 @@ import { useSignIn } from "@clerk/nextjs";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import CommonInput from "@/components/common/CommonInput";
+import Cta from "@/components/common/Cta";
 
 export default function CustomSignIn() {
   const { signIn, isLoaded } = useSignIn();
   const router = useRouter();
-
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -216,13 +216,13 @@ export default function CustomSignIn() {
           </>
         )}
 
-        <button className="w-full bg-black text-white p-2 mb-3">
+        <Cta className="w-full mb-3">
           {showCodeVerification
             ? "Reset Password"
             : showForgotPassword
               ? "Send Reset Code"
               : "Sign In"}
-        </button>
+        </Cta>
 
         {/* Navigation buttons */}
         {!showForgotPassword && !showCodeVerification ? (
@@ -234,7 +234,7 @@ export default function CustomSignIn() {
                 setError("");
                 setResetMessage("");
               }}
-              className="text-blue-500 hover:underline text-sm block w-full"
+              className="hover:text-[#ff5e00] text-[#1f2937] duration-300 text-sm block w-full"
             >
               Forgot your password?
             </button>
@@ -243,7 +243,7 @@ export default function CustomSignIn() {
               <button
                 type="button"
                 onClick={() => router.push("/sign-up")}
-                className="text-blue-500 hover:underline"
+                className="text-[#ff5e00] hover:text-[#1f2937] duration-300"
               >
                 Sign up
               </button>
@@ -258,7 +258,7 @@ export default function CustomSignIn() {
                 setError("");
                 setResetMessage("");
               }}
-              className="text-blue-500 hover:underline text-sm"
+              className="text-[#ff5e00] hover:text-[#1f2937] duration-300 text-sm"
             >
               Back to Sign In
             </button>
@@ -278,7 +278,7 @@ export default function CustomSignIn() {
                   setError("Failed to resend code");
                 }
               }}
-              className="text-blue-500 hover:underline text-sm block w-full"
+              className="text-[#ff5e00] hover:text-[#1f2937] duration-300 text-sm block w-full"
             >
               Resend Code
             </button>

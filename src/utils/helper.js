@@ -3,7 +3,6 @@ export const NAV_LIST = [
   { url: "/", link: "Home" },
   { url: "/about-us", link: "About Us" },
   { url: "/our-services", link: "Our Services" },
-  { url: "/dealer-info", link: "Dealers Info" },
 ];
 
 // FAQ LIST

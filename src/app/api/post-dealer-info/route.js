@@ -32,13 +32,31 @@ export async function POST(request) {
     let result;
 
     if (dealerId) {
-      // Update existing dealer info
       const updateData = {
         ...dealerData,
         ...(imageAsset && { image: imageAsset }),
       };
 
-      result = await writeClient.patch(dealerId).set(updateData).commit();
+      const cleanId = dealerId.replace(/^drafts\./, "");
+
+      // Try published doc first, fall back to draft
+      const published = await writeClient.fetch(`*[_id == $id][0]._id`, {
+        id: cleanId,
+      });
+      const draftExists = await writeClient.fetch(`*[_id == $id][0]._id`, {
+        id: `drafts.${cleanId}`,
+      });
+
+      const targetId = published
+        ? cleanId
+        : draftExists
+          ? `drafts.${cleanId}`
+          : cleanId;
+
+      result = await writeClient
+        .patch(targetId)
+        .set(updateData)
+        .commit({ autoGenerateArrayKeys: true });
     } else {
       // Check if user already has dealer info
       const existing = await writeClient.fetch(

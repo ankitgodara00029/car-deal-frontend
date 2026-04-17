@@ -157,7 +157,7 @@ const CarDetailsForm = () => {
   };
 
   return (
-    <div className="py-8 md:py-12 px-5 relative">
+    <div className="py-8 md:py-12 sm:px-5 relative">
       <div
         id="car-details-form"
         className="absolute -top-0 sm:-top-14 left-0"

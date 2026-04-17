@@ -1,6 +1,7 @@
 "use client";
 import CommonInput from "@/components/common/CommonInput";
-import { useSignUp, useClerk } from "@clerk/nextjs";
+import Cta from "@/components/common/Cta";
+import { useClerk, useSignUp } from "@clerk/nextjs";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 
@@ -136,10 +137,10 @@ export default function CustomSignUp() {
                 onChange={(e) => setForm({ ...form, password: e.target.value })}
               />
               <div id="clerk-captcha" />
-              <button
+              <Cta
                 type="submit"
                 disabled={isLoading}
-                className={`btn-primary mt-2 flex items-center justify-center gap-2
+                className={`mt-2 flex items-center justify-center gap-2
     ${isLoading ? "opacity-60 cursor-not-allowed" : ""}`}
               >
                 {isLoading ? (
@@ -150,21 +151,24 @@ export default function CustomSignUp() {
                 ) : (
                   "Sign Up"
                 )}
-              </button>
+              </Cta>
             </form>
 
             <div className="my-4 text-center text-gray-400">OR</div>
 
-            <button onClick={signUpWithGoogle} className="btn-google">
+            <Cta
+              onClick={signUpWithGoogle}
+              className="bg-white !text-[#ff5e00] hover:bg-transparent"
+            >
               Continue with Google
-            </button>
+            </Cta>
 
             <p className="text-sm text-gray-600 text-center mt-4">
               Already have an account?{" "}
               <button
                 type="button"
                 onClick={() => router.push("/sign-in")}
-                className="text-blue-500 hover:underline"
+                className="text-[#ff5e00] hover:text-[#1f2937] duration-300"
               >
                 Sign in
               </button>

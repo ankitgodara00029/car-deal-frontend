@@ -116,7 +116,7 @@ const CustomUserButton = () => {
             <button
               onClick={() => {
                 setIsOpen(false);
-                router.push("/post-your-car");
+                router.push("/post-your-car?tab=car");
               }}
               className="flex items-center w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition-colors duration-150"
             >
